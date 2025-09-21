@@ -1,7 +1,7 @@
 import AboutSectionOne from "@/components/About/AboutSectionOne";
 import AboutSectionTwo from "@/components/About/AboutSectionTwo";
 import Breadcrumb from "@/components/Common/Breadcrumb";
-
+import Team from "@/components/Team/";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,8 +17,9 @@ const AboutPage = () => {
         pageName="About Our AI Agency"
         description="Discover how we're revolutionizing businesses with custom AI solutions, secure local deployments, and enterprise-grade data protection. Your trusted partner in AI transformation."
       />
-      <AboutSectionOne />
       <AboutSectionTwo />
+      <Team />
+      <AboutSectionOne />
     </>
   );
 };

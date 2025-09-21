@@ -6,7 +6,7 @@ import brandsData from "./brandsData";
 
 const Brands = () => {
   return (
-    <section className="py-16 bg-gray-light dark:bg-gray-dark overflow-hidden">   
+    <section className="py-16 bg-primary/20 dark:bg-gray-dark overflow-hidden">   
       {/* Continuous Slider */}
       <div className="relative w-full">
         <div className="flex brands-scroll">

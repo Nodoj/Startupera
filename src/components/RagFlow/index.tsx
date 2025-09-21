@@ -575,11 +575,11 @@ const RagFlow = () => {
   const getDiagramTitle = () => {
     switch (currentDiagram) {
       case 'rag':
-        return 'RAG AI Chatbot Architecture';
+        return 'RAG AI Chatbots';
       case 'youtube':
-        return 'YouTube Automation Workflow';
+        return 'YouTube Automation';
       case 'image':
-        return 'AI Image Generation Pipeline';
+        return 'AI Image Generation';
       default:
         return 'AI Automation Architecture';
     }
