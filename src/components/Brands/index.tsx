@@ -1,21 +1,52 @@
+"use client";
+
 import { Brand } from "@/types/brand";
 import Image from "next/image";
 import brandsData from "./brandsData";
 
 const Brands = () => {
   return (
-    <section className="pt-16">
-      <div className="container">
-        <div className="-mx-4 flex flex-wrap">
-          <div className="w-full px-4">
-            <div className="flex flex-wrap items-center justify-center rounded-xs bg-gray-light px-8 py-8 dark:bg-gray-dark sm:px-10 md:px-[50px] md:py-[40px] xl:p-[50px] 2xl:px-[70px] 2xl:py-[60px]">
-              {brandsData.map((brand) => (
-                <SingleBrand key={brand.id} brand={brand} />
-              ))}
-            </div>
-          </div>
+    <section className="py-16 bg-gray-light dark:bg-gray-dark overflow-hidden">   
+      {/* Continuous Slider */}
+      <div className="relative w-full">
+        <div className="flex brands-scroll">
+          {/* First set of brands */}
+          {brandsData.map((brand) => (
+            <SingleBrand key={`first-${brand.id}`} brand={brand} />
+          ))}
+          {/* Duplicate set for seamless loop */}
+          {brandsData.map((brand) => (
+            <SingleBrand key={`second-${brand.id}`} brand={brand} />
+          ))}
         </div>
       </div>
+      
+      {/* Add custom CSS for animation */}
+      <style jsx>{`
+        @keyframes brandScroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        
+        .brands-scroll {
+          animation: brandScroll 40s linear infinite;
+          width: calc(200%);
+        }
+        
+        .brands-scroll:hover {
+          animation-play-state: paused;
+        }
+        
+        @media (max-width: 768px) {
+          .brands-scroll {
+            animation-duration: 25s;
+          }
+        }
+      `}</style>
     </section>
   );
 };
@@ -23,18 +54,23 @@ const Brands = () => {
 export default Brands;
 
 const SingleBrand = ({ brand }: { brand: Brand }) => {
-  const { href, image, imageLight, name } = brand;
+  const { href, image, name } = brand;
 
   return (
-    <div className="flex w-1/2 items-center justify-center px-3 py-[15px] sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+    <div className="flex min-w-[180px] items-center justify-center px-6 py-4 mx-3">
       <a
         href={href}
         target="_blank"
         rel="nofollow noreferrer"
-        className="relative h-10 w-full opacity-70 transition hover:opacity-100 dark:opacity-60 dark:hover:opacity-100"
+        className="group relative h-10 w-full opacity-70 transition-all duration-300 hover:opacity-100 hover:scale-105 dark:opacity-60 dark:hover:opacity-100"
+        title={`Visit ${name}`}
       >
-        <Image src={imageLight} alt={name} fill className="hidden dark:block" />
-        <Image src={image} alt={name} fill className="block dark:hidden" />
+        <Image 
+          src={image} 
+          alt={name} 
+          fill 
+          className="object-contain group-hover:drop-shadow-lg filter dark:brightness-0 dark:invert" 
+        />
       </a>
     </div>
   );

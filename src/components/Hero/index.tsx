@@ -1,5 +1,6 @@
 import Link from "next/link";
 import StarfieldBackground from "@/components/Appbgs/StarfieldBackground";
+import Button from "@/components/Common/Button";
 
 const Hero = () => {
   return (
@@ -23,21 +24,25 @@ const Hero = () => {
                   We build custom AI solutions that transform your business
                   </h1>
                   <p className="mb-12 text-base leading-relaxed! text-gray-200 dark:text-gray-300 sm:text-lg md:text-xl drop-shadow-md">
-                    We specialize in RAG chatbots, workflow automations, and Generative AI solutions. Our custom-built systems integrate seamlessly with your existing infrastructure to deliver intelligent, scalable, and cost-effective automation that drives real business results.
+                    Our custom-built systems integrate seamlessly with your existing infrastructure to deliver intelligent, scalable, and cost-effective automation that drives real business results.
                   </p>
                   <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                    <Link
-                      href="https://nextjstemplates.com/templates/saas-starter-startup"
-                      className="rounded-xs bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 shadow-lg hover:shadow-xl transition-all"
+                    <Button
+                      href="#"
+                      variant="primary"
+                      size="md"
                     >
-                      💡 Get Started
-                    </Link>
-                    <Link
-                      href="https://github.com/NextJSTemplates/startup-nextjs"
-                      className="inline-block rounded-xs bg-white/10 backdrop-blur-sm px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/5 border border-white/20 hover:border-white/30 transition-all"
+                      Schedule a Demo
+                    </Button>
+                    <Button
+                      href="#"
+                      variant="secondary"
+                      size="md"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       View Our Work
-                    </Link>
+                    </Button>
                   </div>
                 </div>
               </div>
