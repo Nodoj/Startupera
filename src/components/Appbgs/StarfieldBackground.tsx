@@ -61,7 +61,13 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = ({
   const dimsRef = useRef<{ cssW: number; cssH: number; scale: number }>({ cssW: 0, cssH: 0, scale: 1 });
   const lastMoveTimeRef = useRef<number>(0);
   const prefersReducedMotion = useReducedMotion();
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering theme-dependent content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const STAR_MIN_SCALE = 0.2;
   const OVERFLOW_THRESHOLD = 50; // CSS px
@@ -70,10 +76,10 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = ({
     () =>
       starColor
         ? [starColor]
-        : theme === "light"
-        ? ["#6c63ff", "#8b5cf6", "#a855f7", "#9333ea"] // purple tints for light theme
-        : ["#ffffff", "#f9a8d4", "#d8b4fe", "#c4b5fd"], // white + soft tints for dark theme
-    [starColor, theme]
+        : !mounted || resolvedTheme === "dark"
+        ? ["#ffffff", "#f9a8d4", "#d8b4fe", "#c4b5fd"] // white + soft tints for dark theme (default)
+        : ["#6c63ff", "#8b5cf6", "#a855f7", "#9333ea"], // purple tints for light theme
+    [starColor, mounted, resolvedTheme]
   );
 
   const nowMs = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
@@ -321,11 +327,11 @@ const StarfieldBackground: React.FC<StarfieldBackgroundProps> = ({
         style={{
           pointerEvents: "none",
           background:
-            theme === "light"
+            mounted && resolvedTheme === "light"
               ? "radial-gradient(ellipse at top right, rgba(108,0,167,0.06), transparent 70%)," +
                 "radial-gradient(ellipse at bottom left, rgba(232,121,249,0.04), transparent 70%)," +
                 "radial-gradient(circle at 60% 30%, rgba(76,29,149,0.05), transparent 50%)," +
-                "#f0f2f9"
+                "#f4f2ff"
               : "radial-gradient(ellipse at top right, rgba(108,0,167,0.08), transparent 70%)," +
                 "radial-gradient(ellipse at bottom left, rgba(232,121,249,0.05), transparent 70%)," +
                 "radial-gradient(circle at 60% 30%, rgba(76,29,149,0.07), transparent 50%)," +

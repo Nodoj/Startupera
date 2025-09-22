@@ -1,5 +1,5 @@
-import Image from "next/image";
 import SectionTitle from "../Common/SectionTitle";
+import AnimatedCubes from "../AnimatedCubes";
 
 const checkIcon = (
   <svg width="16" height="13" viewBox="0 0 16 13" className="fill-current">
@@ -24,8 +24,8 @@ const AboutSectionOne = () => {
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 lg:w-1/2">
               <SectionTitle
-                title="Custom AI Solutions Built for Your Business"
-                paragraph="We specialize in developing tailored AI systems that run securely in your local environment. Our focus is on delivering enterprise-grade AI automation while maintaining complete data privacy and security for your organization."
+                title="Custom AI Built for You"
+                paragraph="At Toraflow, we believe AI should feel like a natural part of your workflow. That’s why we build custom AI solutions designed to run securely in your own environment, giving you full control over your data. We put privacy first, always. Your information stays safe, your business stays protected, and your automations scale as you grow. Whether it’s custom models, enterprise-grade security, or round-the-clock support, we’re here to make sure your AI works the way you need it to—no compromises."
                 mb="44px"
               />
 
@@ -50,19 +50,10 @@ const AboutSectionOne = () => {
             </div>
 
             <div className="w-full px-4 lg:w-1/2">
-              <div className="relative mx-auto aspect-25/24 max-w-[500px] lg:mr-0">
-                <Image
-                  src="/images/about/about-image.svg"
-                  alt="about-image"
-                  fill
-                  className="mx-auto max-w-full drop-shadow-three dark:hidden dark:drop-shadow-none lg:mr-0"
-                />
-                <Image
-                  src="/images/about/about-image-dark.svg"
-                  alt="about-image"
-                  fill
-                  className="mx-auto hidden max-w-full drop-shadow-three dark:block dark:drop-shadow-none lg:mr-0"
-                />
+              <div className="relative mx-auto max-w-[500px] lg:mr-0">
+                <div className="mx-auto max-w-full lg:mr-0">
+                  <AnimatedCubes />
+                </div>
               </div>
             </div>
           </div>

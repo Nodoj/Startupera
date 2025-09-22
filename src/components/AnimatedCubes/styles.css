@@ -1,0 +1,192 @@
+@keyframes animate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+}
+
+.animated-cubes-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  transform: skewY(-20deg);
+  /* Removed animation from container to prevent color changing */
+}
+
+.animated-cubes-container .cube {
+  position: relative;
+  z-index: 2;
+  animation: float 4s ease-in-out infinite;
+}
+
+.animated-cubes-container .cube:nth-child(2) {
+  z-index: 1;
+  translate: -60px -60px;
+  animation: floatReverse 3.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animated-cubes-container .cube:nth-child(3) {
+  z-index: 3;
+  translate: 60px 60px;
+  animation: float 4.5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animated-cubes-container .cube div {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  translate: calc(-70px * var(--x)) calc(-60px * var(--y));
+}
+
+.animated-cubes-container .cube div span {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: #e5e7eb; /* Light gray base */
+  z-index: calc(1 * var(--i));
+  transition: 1.5s;
+}
+
+/* Dark theme support */
+.dark .animated-cubes-container .cube div span {
+  background: #374151; /* Dark gray base */
+}
+
+.animated-cubes-container .cube div span:hover {
+  transition: 0s;
+  background: #4a6cf7; /* Primary color */
+  filter: drop-shadow(0 0 30px #4a6cf7);
+}
+
+.animated-cubes-container .cube div span:hover::before {
+  transition: 0s;
+  background: #3b5bdb !important; /* Slightly darker shade for left side */
+}
+
+.animated-cubes-container .cube div span:hover::after {
+  transition: 0s;
+  background: #6366f1 !important; /* Slightly lighter shade for top side */
+}
+
+.animated-cubes-container .cube div span::before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  width: 40px;
+  height: 100%;
+  background: #f3f4f6; /* Lighter gray for side */
+  transform-origin: right;
+  transform: skewY(45deg);
+  transition: background 1.5s;
+}
+
+/* Dark theme support for ::before */
+.dark .animated-cubes-container .cube div span::before {
+  background: #4b5563; /* Darker gray for side */
+}
+
+.animated-cubes-container .cube div span::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 0px;
+  width: 100%;
+  height: 40px;
+  background: #f9fafb; /* Lightest gray for top */
+  transform-origin: bottom;
+  transform: skewX(45deg);
+  transition: background 1.5s;
+}
+
+/* Dark theme support for ::after */
+.dark .animated-cubes-container .cube div span::after {
+  background: #6b7280; /* Medium gray for top */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  @keyframes floatMobile {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  @keyframes floatReverseMobile {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(15px);
+    }
+  }
+
+  .animated-cubes-container {
+    min-height: 250px;
+    transform: skewY(-15deg) scale(0.8);
+  }
+  
+  .animated-cubes-container .cube {
+    animation: floatMobile 4s ease-in-out infinite;
+  }
+  
+  .animated-cubes-container .cube:nth-child(2) {
+    translate: -40px -40px;
+    animation: floatReverseMobile 3.5s ease-in-out infinite;
+    animation-delay: 0.5s;
+  }
+  
+  .animated-cubes-container .cube:nth-child(3) {
+    translate: 40px 40px;
+    animation: floatMobile 4.5s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+  
+  .animated-cubes-container .cube div {
+    gap: 20px;
+    translate: calc(-50px * var(--x)) calc(-40px * var(--y));
+  }
+  
+  .animated-cubes-container .cube div span {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .animated-cubes-container .cube div span::before {
+    left: -30px;
+    width: 30px;
+  }
+  
+  .animated-cubes-container .cube div span::after {
+    top: -30px;
+    height: 30px;
+  }
+}
