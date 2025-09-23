@@ -1,0 +1,187 @@
+import { Position } from 'reactflow';
+import { 
+  FileText, 
+  Search, 
+  Scissors, 
+  Brain, 
+  Database, 
+  Target, 
+  ClipboardList, 
+  Bot, 
+  Settings,
+  CheckCircle,
+  PenTool
+} from "lucide-react";
+
+export const getRagNodes = (isDark: boolean) => [
+  // Document Processing Pipeline (Top Row)
+  {
+    id: '1',
+    type: 'inputNode',
+    data: { label: 'Document Upload', inputValue: '' },
+    position: { x: 0, y: 200 },
+    sourcePosition: Position.Right,
+    draggable: false,
+  },
+  {
+    id: '2',
+    type: 'processNode',
+    data: { label: 'Format Detection', icon: FileText },
+    position: { x: 280, y: 150 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  {
+    id: '3',
+    type: 'processNode',
+    data: { label: 'Text Extraction', icon: Search },
+    position: { x: 500, y: 150 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  {
+    id: '4',
+    type: 'processNode',
+    data: { label: 'Content Cleaning', icon: Settings },
+    position: { x: 720, y: 150 },
+    sourcePosition: Position.Bottom,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  
+  // Text Processing Pipeline (Second Row)
+  {
+    id: '5',
+    type: 'processNode',
+    data: { label: 'Text Chunking', icon: Scissors },
+    position: { x: 940, y: 150 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Top,
+    draggable: false,
+  },
+  {
+    id: '6',
+    type: 'processNode',
+    data: { label: 'Metadata Extraction', icon: ClipboardList },
+    position: { x: 1160, y: 180 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  {
+    id: '7',
+    type: 'processNode',
+    data: { label: 'Embedding Generation', icon: Brain },
+    position: { x: 1160, y: 180 },
+    sourcePosition: Position.Bottom,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  
+  // Storage Layer (Third Row)
+  {
+    id: '8',
+    type: 'processNode',
+    data: { label: 'Vector Database', icon: Database },
+    position: { x: 720, y: 310 },
+    sourcePosition: Position.Left,
+    targetPosition: Position.Top,
+    draggable: false,
+  },
+  {
+    id: '9',
+    type: 'processNode',
+    data: { label: 'Index Creation', icon: Target },
+    position: { x: 940, y: 310 },
+    sourcePosition: Position.Left,
+    targetPosition: Position.Right,
+    draggable: false,
+  },
+  
+  // Query Processing Pipeline (Bottom Left)
+  {
+    id: '10',
+    type: 'inputNode',
+    data: { label: 'User Query', inputValue: '' },
+    position: { x: 0, y: 350 },
+    sourcePosition: Position.Right,
+    draggable: false,
+  },
+  {
+    id: '11',
+    type: 'processNode',
+    data: { label: 'Query Analysis', icon: Search },
+    position: { x: 280, y: 400 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  {
+    id: '12',
+    type: 'processNode',
+    data: { label: 'Query Embedding', icon: Brain },
+    position: { x: 500, y: 400 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  
+  // Retrieval & Response Pipeline (Bottom Right)
+  {
+    id: '13',
+    type: 'processNode',
+    data: { label: 'Similarity Search', icon: Target },
+    position: { x: 720, y: 400 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  {
+    id: '14',
+    type: 'processNode',
+    data: { label: 'Context Ranking', icon: ClipboardList },
+    position: { x: 940, y: 400 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  {
+    id: '15',
+    type: 'processNode',
+    data: { label: 'Prompt Assembly', icon: PenTool },
+    position: { x: 1160, y: 400 },
+    sourcePosition: Position.Bottom,
+    targetPosition: Position.Left,
+    draggable: false,
+  },
+  
+  // Final Processing
+  {
+    id: '16',
+    type: 'processNode',
+    data: { label: 'LLM Processing', icon: Bot },
+    position: { x: 500, y: 530 },
+    sourcePosition: Position.Left,
+    targetPosition: Position.Top,
+    draggable: false,
+  },
+  {
+    id: '17',
+    type: 'processNode',
+    data: { label: 'Response Filtering', icon: CheckCircle },
+    position: { x: 720, y: 530 },
+    sourcePosition: Position.Left,
+    targetPosition: Position.Right,
+    draggable: false,
+  },
+  {
+    id: '18',
+    type: 'outputNode',
+    data: { label: 'Final Response' },
+    position: { x: 1020, y: 530 },
+    targetPosition: Position.Right,
+    draggable: false,
+  },
+];

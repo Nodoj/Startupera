@@ -50,8 +50,8 @@ const AboutSectionOne = () => {
             </div>
 
             <div className="w-full px-4 lg:w-1/2">
-              <div className="relative mx-auto max-w-[500px] lg:mr-0">
-                <div className="mx-auto max-w-full lg:mr-0">
+              <div className="relative flex items-center justify-center min-h-[400px]">
+                <div className="transform translate-y-[-100px]">
                   <AnimatedCubes />
                 </div>
               </div>

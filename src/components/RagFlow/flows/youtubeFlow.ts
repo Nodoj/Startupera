@@ -1,0 +1,82 @@
+import { Position } from 'reactflow';
+import { 
+  PenTool,
+  Mic,
+  Palette,
+  Film,
+  Image,
+  Upload
+} from "lucide-react";
+
+export const getYoutubeNodes = (isDark: boolean) => [
+  {
+    id: '1',
+    type: 'inputNode',
+    data: { label: 'Video Topic', inputValue: '' },
+    position: { x: 0, y: 150 },
+    sourcePosition: Position.Right,
+    draggable: true,
+  },
+  {
+    id: '2',
+    type: 'processNode',
+    data: { label: 'Script Generation', icon: PenTool },
+    position: { x: 250, y: 100 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+  {
+    id: '3',
+    type: 'processNode',
+    data: { label: 'Voice Synthesis', icon: Mic },
+    position: { x: 450, y: 50 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+  {
+    id: '4',
+    type: 'processNode',
+    data: { label: 'Image Generation', icon: Palette },
+    position: { x: 450, y: 150 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+  {
+    id: '5',
+    type: 'processNode',
+    data: { label: 'Video Editing', icon: Film },
+    position: { x: 650, y: 100 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+  {
+    id: '6',
+    type: 'processNode',
+    data: { label: 'Thumbnail Gen', icon: Image },
+    position: { x: 850, y: 50 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+  {
+    id: '7',
+    type: 'processNode',
+    data: { label: 'YouTube Upload', icon: Upload },
+    position: { x: 850, y: 150 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+  {
+    id: '8',
+    type: 'outputNode',
+    data: { label: 'Published Video' },
+    position: { x: 1050, y: 100 },
+    targetPosition: Position.Left,
+    draggable: true,
+  },
+];

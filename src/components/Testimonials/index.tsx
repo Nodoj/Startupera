@@ -5,28 +5,28 @@ import SingleTestimonial from "./SingleTestimonial";
 const testimonialData: Testimonial[] = [
   {
     id: 1,
-    name: "Musharof Chy",
-    designation: "Founder @TailGrids",
+    name: "Sarah Chen",
+    designation: "Marketing Manager",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "Toraflow automated my weekly report generation that used to take 4 hours every Friday. Now I just review the AI-generated insights in 15 minutes. I actually have weekends again!",
     image: "/images/testimonials/auth-01.png",
     star: 5,
   },
   {
     id: 2,
-    name: "Devid Weilium",
-    designation: "Founder @UIdeck",
+    name: "Marcus Rodriguez",
+    designation: "CEO, Local Logistics Co.",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "Our small trucking company was drowning in paperwork. Toraflow's AI handles invoice processing, route optimization, and customer communications. We've cut admin time by 70% and can focus on growing our business.",
     image: "/images/testimonials/auth-02.png",
     star: 5,
   },
   {
     id: 3,
-    name: "Lethium Frenci",
-    designation: "Founder @Lineicons",
+    name: "Jennifer Walsh",
+    designation: "Freelance Consultant",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "As a solo consultant, I was spending more time on admin than actual consulting. Their AI assistant handles my scheduling, follow-ups, and proposal drafts. I've doubled my billable hours without working longer days.",
     image: "/images/testimonials/auth-03.png",
     star: 5,
   },
@@ -37,8 +37,8 @@ const Testimonials = () => {
     <section className="dark:bg-bg-color-dark bg-gray-light relative z-10 py-16 md:py-20 lg:py-28">
       <div className="container">
         <SectionTitle
-          title="What Our Customers Say"
-          paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
+          title="Real Stories, Real Results"
+          paragraph="See how individuals and small business owners are reclaiming their time and growing their businesses with our AI automation solutions."
           center
         />
 

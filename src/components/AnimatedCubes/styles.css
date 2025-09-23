@@ -31,8 +31,9 @@
   justify-content: center;
   align-items: center;
   min-height: 300px;
-  transform: skewY(-20deg);
+  transform: skewY(-20deg) translateY(10px);
   /* Removed animation from container to prevent color changing */
+  /* Added translateY to compensate for skew visual offset */
 }
 
 .animated-cubes-container .cube {
@@ -151,7 +152,7 @@
 
   .animated-cubes-container {
     min-height: 250px;
-    transform: skewY(-15deg) scale(0.8);
+    transform: skewY(-15deg) scale(0.8) translateY(8px);
   }
   
   .animated-cubes-container .cube {

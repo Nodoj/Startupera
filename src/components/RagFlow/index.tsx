@@ -20,6 +20,14 @@ import {
 import 'reactflow/dist/style.css';
 import './ragflow.css';
 import SectionTitle from "../Common/SectionTitle";
+import { 
+  FileText, 
+  MessageSquare,
+  Bot,
+  Youtube,
+  Zap
+} from "lucide-react";
+import { getDiagramConfig, getInitialEdges } from './flows';
 
 // Custom Interactive Node Components
 const InputNode = ({ data, selected }: any) => {
@@ -28,7 +36,7 @@ const InputNode = ({ data, selected }: any) => {
   return (
     <div className="px-4 py-3 shadow-lg rounded-lg border-2 border-blue-500 bg-gradient-to-r from-blue-500 to-blue-600 text-white min-w-[180px]">
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-lg">📄</span>
+        <FileText className="h-4 w-4" />
         <strong className="text-sm">{data.label}</strong>
       </div>
       <input
@@ -44,11 +52,14 @@ const InputNode = ({ data, selected }: any) => {
 };
 
 const ProcessNode = ({ data, selected }: any) => {
+  const IconComponent = data.icon;
   return (
     <div className="px-4 py-3 shadow-lg rounded-lg border-2 border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 min-w-[160px]">
       <Handle type="target" position={Position.Left} className="w-3 h-3 bg-gray-400" />
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-lg">{data.icon}</span>
+        <div className="flex h-5 w-5 items-center justify-center">
+          <IconComponent className="h-4 w-4 text-primary" />
+        </div>
         <strong className="text-sm text-gray-800 dark:text-white">{data.label}</strong>
       </div>
       <Handle type="source" position={Position.Right} className="w-3 h-3 bg-gray-400" />
@@ -63,7 +74,7 @@ const OutputNode = ({ data, selected }: any) => {
     <div className="px-4 py-3 shadow-lg rounded-lg border-2 border-green-500 bg-gradient-to-r from-green-500 to-green-600 text-white min-w-[200px]">
       <Handle type="target" position={Position.Left} className="w-3 h-3 bg-white" />
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-lg">💬</span>
+        <MessageSquare className="h-4 w-4" />
         <strong className="text-sm">{data.label}</strong>
       </div>
       <textarea
@@ -122,390 +133,7 @@ const getNodeStyles = (isDark: boolean) => ({
   },
 });
 
-// Different diagram configurations
-const getDiagramConfig = (type: string, isDark: boolean) => {
-  switch (type) {
-    case 'rag':
-      return getRagNodes(isDark);
-    case 'youtube':
-      return getYoutubeNodes(isDark);
-    case 'image':
-      return getImageNodes(isDark);
-    default:
-      return getRagNodes(isDark);
-  }
-};
-
-const getRagNodes = (isDark: boolean) => [
-  // Left-to-right horizontal flow
-  {
-    id: '1',
-    type: 'inputNode',
-    data: { label: 'Document Input', inputValue: '' },
-    position: { x: 0, y: 100 },
-    sourcePosition: Position.Right,
-    draggable: true,
-  },
-  {
-    id: '2',
-    type: 'processNode',
-    data: { label: 'Text Extraction', icon: '🔍' },
-    position: { x: 250, y: 50 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '3',
-    type: 'processNode',
-    data: { label: 'Text Chunking', icon: '✂️' },
-    position: { x: 250, y: 150 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '4',
-    type: 'processNode',
-    data: { label: 'Embedding Gen', icon: '🧠' },
-    position: { x: 450, y: 100 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '5',
-    type: 'processNode',
-    data: { label: 'Vector Database', icon: '🗄️' },
-    position: { x: 650, y: 100 },
-    sourcePosition: Position.Bottom,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '6',
-    type: 'inputNode',
-    data: { label: 'User Query', inputValue: '' },
-    position: { x: 0, y: 300 },
-    sourcePosition: Position.Right,
-    draggable: true,
-  },
-  {
-    id: '7',
-    type: 'processNode',
-    data: { label: 'Query Processing', icon: '🔍' },
-    position: { x: 250, y: 300 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '8',
-    type: 'processNode',
-    data: { label: 'Similarity Search', icon: '🎯' },
-    position: { x: 650, y: 250 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Top,
-    draggable: true,
-  },
-  {
-    id: '9',
-    type: 'processNode',
-    data: { label: 'Context Retrieval', icon: '📋' },
-    position: { x: 450, y: 300 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '10',
-    type: 'processNode',
-    data: { label: 'LLM Processing', icon: '🤖' },
-    position: { x: 850, y: 250 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '11',
-    type: 'outputNode',
-    data: { label: 'AI Response' },
-    position: { x: 1050, y: 200 },
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-];
-
-const getYoutubeNodes = (isDark: boolean) => [
-  {
-    id: '1',
-    type: 'inputNode',
-    data: { label: 'Video Topic', inputValue: '' },
-    position: { x: 0, y: 100 },
-    sourcePosition: Position.Right,
-    draggable: true,
-  },
-  {
-    id: '2',
-    type: 'processNode',
-    data: { label: 'Script Generation', icon: '📝' },
-    position: { x: 250, y: 100 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '3',
-    type: 'processNode',
-    data: { label: 'Voice Synthesis', icon: '🎤' },
-    position: { x: 450, y: 50 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '4',
-    type: 'processNode',
-    data: { label: 'Image Generation', icon: '🎨' },
-    position: { x: 450, y: 150 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '5',
-    type: 'processNode',
-    data: { label: 'Video Editing', icon: '🎬' },
-    position: { x: 650, y: 100 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '6',
-    type: 'processNode',
-    data: { label: 'Thumbnail Gen', icon: '🖼️' },
-    position: { x: 850, y: 50 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '7',
-    type: 'processNode',
-    data: { label: 'YouTube Upload', icon: '📤' },
-    position: { x: 850, y: 150 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '8',
-    type: 'outputNode',
-    data: { label: 'Published Video' },
-    position: { x: 1050, y: 100 },
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-];
-
-const getImageNodes = (isDark: boolean) => [
-  {
-    id: '1',
-    type: 'inputNode',
-    data: { label: 'Text Prompt', inputValue: '' },
-    position: { x: 0, y: 100 },
-    sourcePosition: Position.Right,
-    draggable: true,
-  },
-  {
-    id: '2',
-    type: 'processNode',
-    data: { label: 'Prompt Enhancement', icon: '✨' },
-    position: { x: 250, y: 100 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '3',
-    type: 'processNode',
-    data: { label: 'Style Selection', icon: '🎨' },
-    position: { x: 450, y: 50 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '4',
-    type: 'processNode',
-    data: { label: 'AI Generation', icon: '🤖' },
-    position: { x: 450, y: 150 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '5',
-    type: 'processNode',
-    data: { label: 'Image Processing', icon: '🔧' },
-    position: { x: 650, y: 100 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '6',
-    type: 'processNode',
-    data: { label: 'Quality Check', icon: '✅' },
-    position: { x: 850, y: 100 },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-  {
-    id: '7',
-    type: 'outputNode',
-    data: { label: 'Final Image' },
-    position: { x: 1050, y: 100 },
-    targetPosition: Position.Left,
-    draggable: true,
-  },
-];
-
-const getInitialEdges = (isDark: boolean) => [
-  {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#4A6CF7', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-      animation: 'dash 2s linear infinite',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#4A6CF7' },
-    animated: true,
-  },
-  {
-    id: 'e2-3',
-    source: '2',
-    target: '3',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#4A6CF7', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#4A6CF7' },
-    animated: true,
-  },
-  {
-    id: 'e3-4',
-    source: '3',
-    target: '4',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#4A6CF7', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#4A6CF7' },
-    animated: true,
-  },
-  {
-    id: 'e4-5',
-    source: '4',
-    target: '5',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#4A6CF7', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#4A6CF7' },
-    animated: true,
-  },
-  {
-    id: 'e6-7',
-    source: '6',
-    target: '7',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#10B981', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#10B981' },
-    animated: true,
-  },
-  {
-    id: 'e7-9',
-    source: '7',
-    target: '9',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#10B981', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#10B981' },
-    animated: true,
-  },
-  {
-    id: 'e5-8',
-    source: '5',
-    target: '8',
-    type: 'smoothstep',
-    style: { 
-      stroke: isDark ? '#9CA3AF' : '#6B7280', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: isDark ? '#9CA3AF' : '#6B7280' },
-    animated: true,
-  },
-  {
-    id: 'e8-9',
-    source: '8',
-    target: '9',
-    type: 'smoothstep',
-    style: { 
-      stroke: isDark ? '#9CA3AF' : '#6B7280', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: isDark ? '#9CA3AF' : '#6B7280' },
-    animated: true,
-  },
-  {
-    id: 'e9-10',
-    source: '9',
-    target: '10',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#10B981', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#10B981' },
-    animated: true,
-  },
-  {
-    id: 'e10-11',
-    source: '10',
-    target: '11',
-    type: 'smoothstep',
-    style: { 
-      stroke: '#10B981', 
-      strokeWidth: 3,
-      strokeDasharray: '5,5',
-    },
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#10B981' },
-    animated: true,
-  },
-];
+// Flow configurations are now imported from separate files
 
 const RagFlow = () => {
   const { theme, resolvedTheme } = useTheme();
@@ -634,7 +262,7 @@ const RagFlow = () => {
               }}
               minZoom={0.3}
               maxZoom={2}
-              defaultViewport={{ x: 0, y: 0, zoom: 0.7 }}
+              defaultViewport={{ x: 0, y: 0, zoom: 0.4 }}
               nodesDraggable={true}
               nodesConnectable={true}
               elementsSelectable={true}
@@ -649,33 +277,36 @@ const RagFlow = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setCurrentDiagram('rag')}
-                      className={`px-3 py-2 rounded text-xs font-medium transition-colors ${
+                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-colors ${
                         currentDiagram === 'rag'
                           ? 'bg-blue-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
-                      🤖 RAG Chatbot
+                      <Bot className="h-3 w-3" />
+                      RAG Chatbot
                     </button>
                     <button
                       onClick={() => setCurrentDiagram('youtube')}
-                      className={`px-3 py-2 rounded text-xs font-medium transition-colors ${
+                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-colors ${
                         currentDiagram === 'youtube'
                           ? 'bg-red-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
-                      📺 YouTube Automation
+                      <Youtube className="h-3 w-3" />
+                      YouTube Automation
                     </button>
                     <button
                       onClick={() => setCurrentDiagram('image')}
-                      className={`px-3 py-2 rounded text-xs font-medium transition-colors ${
+                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-colors ${
                         currentDiagram === 'image'
                           ? 'bg-purple-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
-                      🎨 Image Generation
+                      <Zap className="h-3 w-3" />
+                      Image Generation
                     </button>
                   </div>
                 </div>

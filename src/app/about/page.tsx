@@ -1,12 +1,10 @@
-import AboutSectionOne from "@/components/About/AboutSectionOne";
-import AboutSectionTwo from "@/components/About/AboutSectionTwo";
+import ComprehensiveAbout from "@/components/About/ComprehensiveAbout";
 import Breadcrumb from "@/components/Common/Breadcrumb";
-import Team from "@/components/Team/";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | Custom AI Solutions & Data Security Experts",
-  description: "Leading AI agency specializing in custom AI solutions, local deployments, and enterprise data security. Transform your business with secure, tailored AI automation.",
+  title: "About Toraflow | Passionate AI & Technology Experts",
+  description: "Meet our passionate team of 4 core technicians with 15+ years experience. We build custom AI solutions, enterprise software, and infrastructure with no limitations. Your dreams, our expertise.",
   // other metadata
 };
 
@@ -14,12 +12,10 @@ const AboutPage = () => {
   return (
     <>
       <Breadcrumb
-        pageName="About Our AI Agency"
-        description="Discover how we're revolutionizing businesses with custom AI solutions, secure local deployments, and enterprise-grade data protection. Your trusted partner in AI transformation."
+        pageName="About Toraflow"
+        description="Meet our passionate team of technology experts who turn dreams into reality. With 15+ years of experience and no limitations, we're here to build something meaningful just for you."
       />
-      <AboutSectionTwo />
-      <Team />
-      <AboutSectionOne />
+      <ComprehensiveAbout />
     </>
   );
 };
