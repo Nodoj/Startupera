@@ -117,10 +117,10 @@ const ComprehensiveAbout = () => {
                   At Toraflow, we believe technology should serve people, not the other way around. Our journey began with a simple vision: to create meaningful solutions that truly make a difference.
                 </p>
                 <p className="mb-6 text-base font-medium leading-relaxed text-body-color sm:text-lg sm:leading-relaxed">
-                  We're not just another tech company. We're dreamers, builders, and problem-solvers who thrive on turning your vision into reality. Whether you're an individual with a unique idea or an enterprise needing robust solutions, we're here to make it happen.
+                  We&apos;re not just another tech company. We&apos;re dreamers, builders, and problem-solvers who thrive on turning your vision into reality. Whether you&apos;re an individual with a unique idea or an enterprise needing robust solutions, we&apos;re here to make it happen.
                 </p>
                 <p className="text-base font-medium leading-relaxed text-body-color sm:text-lg sm:leading-relaxed">
-                  Our open-minded approach means we don't say "no" - we say "how can we make this work?" Every project is an opportunity to push boundaries and deliver something extraordinary.
+                  Our open-minded approach means we don&apos;t say &quot;no&quot; - we say &quot;how can we make this work?&quot; Every project is an opportunity to push boundaries and deliver something extraordinary.
                 </p>
               </div>
             </div>
@@ -226,7 +226,7 @@ const ComprehensiveAbout = () => {
                       Full-Stack Infrastructure
                     </h3>
                     <p className="text-body-color">
-                      We've built complete offices, designed datacenters, and deployed cloud applications from the ground up.
+                      We&apos;ve built complete offices, designed datacenters, and deployed cloud applications from the ground up.
                     </p>
                   </div>
                 </div>
@@ -284,7 +284,7 @@ const ComprehensiveAbout = () => {
               Ready to Make Your Dream Come True?
             </h2>
             <p className="mb-8 text-lg text-body-color">
-              Whether you need a custom solution for your business or want to build something meaningful just for you, we're here to help. No limitations, no compromises - just results.
+              Whether you need a custom solution for your business or want to build something meaningful just for you, we&apos;re here to help. No limitations, no compromises - just results.
             </p>
             <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
               <Button
