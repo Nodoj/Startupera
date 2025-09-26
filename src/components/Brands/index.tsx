@@ -37,9 +37,6 @@ const Brands = () => {
           width: calc(200%);
         }
         
-        .brands-scroll:hover {
-          animation-play-state: paused;
-        }
         
         @media (max-width: 768px) {
           .brands-scroll {
@@ -54,24 +51,18 @@ const Brands = () => {
 export default Brands;
 
 const SingleBrand = ({ brand }: { brand: Brand }) => {
-  const { href, image, name } = brand;
+  const { image, name } = brand;
 
   return (
     <div className="flex min-w-[180px] items-center justify-center px-6 py-4 mx-3">
-      <a
-        href={href}
-        target="_blank"
-        rel="nofollow noreferrer"
-        className="group relative h-10 w-full opacity-70 transition-all duration-300 hover:opacity-100 hover:scale-105 dark:opacity-60 dark:hover:opacity-100"
-        title={`Visit ${name}`}
-      >
+      <div className="relative h-10 w-full opacity-80 dark:opacity-70 transition-transform duration-300 hover:scale-125 hover:opacity-100 dark:hover:opacity-90">
         <Image 
           src={image} 
           alt={name} 
           fill 
-          className="object-contain group-hover:drop-shadow-lg filter dark:brightness-0 dark:invert" 
+          className="object-contain filter dark:brightness-0 dark:invert" 
         />
-      </a>
+      </div>
     </div>
   );
 };

@@ -108,6 +108,43 @@
   animation: pulse-glow 3s ease-in-out infinite reverse;
 }
 
+/* Canvas interaction states */
+.react-flow.pointer-events-none {
+  pointer-events: none;
+}
+
+.react-flow.pointer-events-none .react-flow__pane {
+  pointer-events: none;
+}
+
+/* Ensure scroll events pass through when canvas is inactive */
+.react-flow.pointer-events-none * {
+  pointer-events: none !important;
+}
+
+/* Allow panel interactions even when canvas is inactive */
+.react-flow.pointer-events-none .react-flow__panel {
+  pointer-events: auto;
+}
+
+.react-flow.pointer-events-none .react-flow__panel * {
+  pointer-events: auto !important;
+}
+
+/* Cursor states for canvas interaction */
+.react-flow__pane {
+  cursor: grab;
+}
+
+.react-flow__pane:active {
+  cursor: grabbing;
+}
+
+/* Override cursor when canvas is inactive */
+.react-flow.pointer-events-none .react-flow__pane {
+  cursor: grab;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .react-flow__node {

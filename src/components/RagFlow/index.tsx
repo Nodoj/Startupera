@@ -70,6 +70,43 @@ const ProcessNode = ({ data, selected }: any) => {
 const OutputNode = ({ data, selected }: any) => {
   const [output, setOutput] = useState('AI Response will appear here...');
   
+  // Check if this is the Image Generation flow
+  const isImageFlow = data.label === 'Final Gallery';
+  
+  if (isImageFlow) {
+    return (
+      <div className="px-4 py-3 shadow-lg rounded-lg border-2 border-gray-500 dark:bg-gray-dark dark:border-gray-600 bg-gray-light text-white min-w-[280px]">
+        <Handle type="target" position={Position.Left} className="w-3 h-3 bg-white" />
+        <div className="flex items-center gap-2 mb-3">
+          <MessageSquare className="h-4 w-4" />
+          <strong className="text-sm">{data.label}</strong>
+        </div>
+        
+        {/* Image Gallery Mockup */}
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          {/* Generated Image Placeholders */}
+          <div className="aspect-square bg-gradient-to-br from-purple-400 to-pink-400 rounded-md flex items-center justify-center">
+            <span className="text-xs font-medium">Generated 1</span>
+          </div>
+          <div className="aspect-square bg-gradient-to-br from-blue-400 to-cyan-400 rounded-md flex items-center justify-center">
+            <span className="text-xs font-medium">Generated 2</span>
+          </div>
+          <div className="aspect-square bg-gradient-to-br from-orange-400 to-red-400 rounded-md flex items-center justify-center">
+            <span className="text-xs font-medium">Generated 3</span>
+          </div>
+          <div className="aspect-square bg-gradient-to-br from-green-400 to-emerald-400 rounded-md flex items-center justify-center">
+            <span className="text-xs font-medium">Generated 4</span>
+          </div>
+        </div>
+        
+        <div className="text-xs opacity-90 text-center">
+          ✨ High-quality AI generated images
+        </div>
+      </div>
+    );
+  }
+  
+  // Default output node for other flows
   return (
     <div className="px-4 py-3 shadow-lg rounded-lg border-2 border-green-500 bg-gradient-to-r from-green-500 to-green-600 text-white min-w-[200px]">
       <Handle type="target" position={Position.Left} className="w-3 h-3 bg-white" />
@@ -139,6 +176,7 @@ const RagFlow = () => {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentDiagram, setCurrentDiagram] = useState('rag');
+  const [isCanvasActive, setIsCanvasActive] = useState(false);
   const isDark = resolvedTheme === 'dark';
 
   // Node types
@@ -199,6 +237,24 @@ const RagFlow = () => {
     );
   }, [setEdges]);
 
+  // Handle canvas interaction states
+  const handleCanvasClick = useCallback(() => {
+    setIsCanvasActive(true);
+  }, []);
+
+  const handleCanvasBlur = useCallback(() => {
+    setIsCanvasActive(false);
+  }, []);
+
+  const handleCanvasMouseLeave = useCallback(() => {
+    setIsCanvasActive(false);
+  }, []);
+
+  // Handle mouse enter to show interaction hint
+  const handleCanvasMouseEnter = useCallback(() => {
+    // Just for visual feedback, don't activate yet
+  }, []);
+
   // Get diagram title based on current type
   const getDiagramTitle = () => {
     switch (currentDiagram) {
@@ -244,7 +300,18 @@ const RagFlow = () => {
 
         <div className="relative">
           {/* Flow Container */}
-          <div className="w-full h-[600px] bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-lg overflow-hidden">
+          <div 
+            className={`w-full h-[600px] bg-white dark:bg-gray-dark rounded-xl border shadow-lg overflow-hidden transition-all duration-200 ${
+              isCanvasActive 
+                ? 'border-primary ring-2 ring-primary/20 cursor-grab' 
+                : 'border-stroke dark:border-stroke-dark cursor-grab hover:cursor-grab'
+            }`}
+            onClick={handleCanvasClick}
+            onMouseEnter={handleCanvasMouseEnter}
+            onMouseLeave={handleCanvasMouseLeave}
+            tabIndex={0}
+            onBlur={handleCanvasBlur}
+          >
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -266,10 +333,10 @@ const RagFlow = () => {
               nodesDraggable={true}
               nodesConnectable={true}
               elementsSelectable={true}
-              panOnDrag={true}
-              zoomOnScroll={true}
+              panOnDrag={isCanvasActive}
+              zoomOnScroll={isCanvasActive}
               zoomOnPinch={true}
-              className="bg-transparent"
+              className={`bg-transparent ${!isCanvasActive ? 'pointer-events-none' : ''}`}
             >
               {/* Diagram Switcher */}
               <Panel position="top-center">
@@ -325,6 +392,7 @@ const RagFlow = () => {
               />
             </ReactFlow>
           </div>
+
 
           {/* Dynamic Legend */}
           <div className="mt-8 flex flex-wrap justify-center gap-6">
