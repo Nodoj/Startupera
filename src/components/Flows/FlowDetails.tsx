@@ -218,8 +218,8 @@ const FlowDetails = ({ flow }: { flow: Flow }) => {
                       Business Challenge
                     </h3>
                     <p className="text-body-color dark:text-body-color-dark">
-                      Traditional manual processes are time-consuming, error-prone, and don't scale with business growth. 
-                      This leads to inefficiencies, increased costs, and missed opportunities in today's competitive market.
+                      Traditional manual processes are time-consuming, error-prone, and don&apos;t scale with business growth. 
+                      This leads to inefficiencies, increased costs, and missed opportunities in today&apos;s competitive market.
                     </p>
                   </div>
 
@@ -312,7 +312,7 @@ const FlowDetails = ({ flow }: { flow: Flow }) => {
                   Ready to Implement This Automation?
                 </h3>
                 <p className="mb-6 text-body-color dark:text-body-color-dark">
-                  Let's discuss how we can customize this solution for your specific business needs and requirements.
+                  Let&apos;s discuss how we can customize this solution for your specific business needs and requirements.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-medium text-white transition-colors hover:bg-primary/90">

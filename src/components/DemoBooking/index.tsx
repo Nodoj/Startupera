@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Calendar, Clock, User, Mail, Building, Phone, CheckCircle, ArrowRight, CalendarDays } from "lucide-react";
+import Link from "next/link";
 
 interface TimeSlot {
   id: string;
@@ -152,7 +153,7 @@ const DemoBooking = () => {
                 Demo Booked Successfully!
               </h1>
               <p className="text-lg text-body-color dark:text-body-color-dark">
-                Thank you for booking a demo with us. We've sent you a confirmation email with all the details.
+                Thank you for booking a demo with us. We&apos;ve sent you a confirmation email with all the details.
               </p>
             </div>
 
@@ -208,12 +209,12 @@ const DemoBooking = () => {
               >
                 Book Another Demo
               </button>
-              <a
+              <Link
                 href="/"
                 className="rounded-xl bg-primary px-6 py-3 text-base font-medium text-white hover:bg-primary/90 transition-colors"
               >
                 Back to Home
-              </a>
+              </Link>
             </div>
           </div>
         </div>

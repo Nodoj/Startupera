@@ -5,11 +5,12 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const flow = flowsData.find((flow) => flow.id === parseInt(params.id));
+  const { id } = await params;
+  const flow = flowsData.find((flow) => flow.id === parseInt(id));
   
   if (!flow) {
     return {
@@ -29,8 +30,9 @@ export async function generateStaticParams() {
   }));
 }
 
-const FlowDetailsPage = ({ params }: Props) => {
-  const flow = flowsData.find((flow) => flow.id === parseInt(params.id));
+const FlowDetailsPage = async ({ params }: Props) => {
+  const { id } = await params;
+  const flow = flowsData.find((flow) => flow.id === parseInt(id));
 
   if (!flow) {
     notFound();
