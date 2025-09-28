@@ -1,5 +1,21 @@
 /* RagFlow Animations and Styles */
 
+/* Global ReactFlow Controls Colors */
+:root {
+  --rf-controls-bg-light: #ffffff;
+  --rf-controls-text-light: #374151;
+  --rf-controls-border-light: #d1d5db;
+  --rf-controls-hover-bg-light: #f9fafb;
+  --rf-controls-hover-border-light: #4a6cf7;
+  
+  --rf-controls-bg-dark: #1f2937;
+  --rf-controls-text-dark: #ffffff;
+  --rf-controls-border-dark: #3f3747;
+  --rf-controls-hover-bg-dark: #4b5563;
+  --rf-controls-hover-text-dark: #6366f1;
+  --rf-controls-hover-border-dark: #4a6cf7;
+}
+
 @keyframes dash {
   to {
     stroke-dashoffset: -10;
@@ -61,15 +77,57 @@
 /* Controls Styling */
 .react-flow__controls {
   transition: all 0.3s ease;
+  left: 10px !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 10px !important;
+  padding: 7px;
+  transform: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  
 }
 
 .react-flow__controls button {
   transition: all 0.2s ease;
+  background-color: var(--rf-controls-bg-light) !important;
+  color: var(--rf-controls-text-light) !important;
+  border: 1px solid var(--rf-controls-border-light) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  width: 25px !important;
+  height: 25px !important;
+  font-size: 16px !important;
 }
 
 .react-flow__controls button:hover {
   transform: scale(1.1);
-  background-color: rgba(74, 108, 247, 0.1);
+  background-color: var(--rf-controls-hover-bg-light) !important;
+  border-color: var(--rf-controls-hover-border-light) !important;
+}
+
+.react-flow__controls button svg {
+  color: var(--rf-controls-text-light) !important;
+  fill: var(--rf-controls-text-light) !important;
+}
+
+/* Dark mode Controls */
+.dark .react-flow__controls button {
+  background-color: var(--rf-controls-bg-dark) !important;
+  color: var(--rf-controls-text-dark) !important;
+  border: 1px solid var(--rf-controls-border-dark) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .react-flow__controls button:hover {
+  background-color: var(--rf-controls-hover-bg-dark) !important;
+  color: var(--rf-controls-hover-text-dark) !important;
+  border-color: var(--rf-controls-hover-border-dark) !important;
+}
+
+.dark .react-flow__controls button svg {
+  color: var(--rf-controls-text-dark) !important;
+  fill: var(--rf-controls-text-dark) !important;
 }
 
 /* MiniMap Styling */
@@ -93,10 +151,6 @@
 
 .dark .react-flow__node.dragging {
   filter: drop-shadow(0 15px 30px rgba(255, 255, 255, 0.15));
-}
-
-.dark .react-flow__controls button:hover {
-  background-color: rgba(74, 108, 247, 0.2);
 }
 
 /* Custom node type styles */

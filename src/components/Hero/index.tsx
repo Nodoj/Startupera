@@ -1,6 +1,7 @@
 import Link from "next/link";
 import StarfieldBackground from "@/components/Appbgs/StarfieldBackground";
 import Button from "@/components/Common/Button";
+import { Bot, UserStar  } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -23,8 +24,10 @@ const Hero = () => {
                   <h1 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-6xl md:leading-tight drop-shadow-lg">
                   TORA<span className="text-primary">FLOW</span><br />
                   </h1>
-                  <h2 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-4xl md:leading-tight drop-shadow-lg">
-                  🤖AI that works for YOU🫵
+                  <h2 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-4xl md:leading-tight drop-shadow-lg flex items-center justify-center gap-3">
+                    <Bot className="h-8 w-8 text-primary sm:h-10 sm:w-10 md:h-12 md:w-12" />
+                    AI that works for YOU
+                    <UserStar  className="h-8 w-8 text-primary sm:h-10 sm:w-10 md:h-12 md:w-12" />
                   </h2>
                   <p className="mb-12 text-base leading-relaxed text-gray-700 dark:text-gray-200 sm:text-lg md:text-xl drop-shadow-md">
                   From automating the boring daily stuff to powering your big ideas<br /> We create AI automations that actually make life easier and work more productive
@@ -54,7 +57,7 @@ const Hero = () => {
         </StarfieldBackground>
 
         {/* Keep the existing decorative SVGs but make them more subtle */}
-        <div className="absolute right-0 top-0 z-[1] opacity-20 lg:opacity-30">
+        {/* <div className="absolute right-0 top-0 z-[1] opacity-20 lg:opacity-30">
           <svg
             width="450"
             height="556"
@@ -191,8 +194,8 @@ const Hero = () => {
               </linearGradient>
             </defs>
           </svg>
-        </div>
-        <div className="absolute bottom-0 left-0 z-[1] opacity-20 lg:opacity-30">
+        </div> */}
+        {/* <div className="absolute bottom-0 left-0 z-[1] opacity-20 lg:opacity-30">
           <svg
             width="364"
             height="201"
@@ -294,7 +297,7 @@ const Hero = () => {
               </radialGradient>
             </defs>
           </svg>
-        </div>
+        </div> */}
       </section>
     </>
   );

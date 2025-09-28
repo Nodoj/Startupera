@@ -379,7 +379,7 @@ const RagFlow = () => {
                 </div>
               </Panel>
               <Controls 
-                className="bg-white dark:bg-gray-dark border border-stroke dark:border-stroke-dark rounded-lg shadow-lg"
+                className="bg-white dark:bg-gray-800 border border-stroke dark:border-gray-600 rounded-lg shadow-lg"
                 showZoom={true}
                 showFitView={true}
                 showInteractive={true}
