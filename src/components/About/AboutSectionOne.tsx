@@ -18,42 +18,40 @@ const AboutSectionOne = () => {
   );
 
   return (
-    <section id="about" className="pt-16 md:pt-20 lg:pt-28">
+    <section id="about" className="h-screen flex items-center justify-center">
       <div className="container">
-        <div className="border-b border-body-color/[.15] pb-16 dark:border-white/[.15] md:pb-20 lg:pb-28">
-          <div className="-mx-4 flex flex-wrap items-center">
-            <div className="w-full px-4 lg:w-1/2">
-              <SectionTitle
-                title="Custom AI Built for You"
-                paragraph="At Toraflow, we believe AI should feel like a natural part of your workflow. That’s why we build custom AI solutions designed to run securely in your own environment, giving you full control over your data. We put privacy first, always. Your information stays safe, your business stays protected, and your automations scale as you grow. Whether it’s custom models, enterprise-grade security, or round-the-clock support, we’re here to make sure your AI works the way you need it to—no compromises."
-                mb="44px"
-              />
+        <div className="-mx-4 flex flex-wrap items-center">
+          <div className="w-full px-4 lg:w-1/2">
+            <SectionTitle
+              title="Custom AI Built for You"
+              paragraph="At Toraflow, we believe AI should feel like a natural part of your workflow. That's why we build custom AI solutions designed to run securely in your own environment, giving you full control over your data. We put privacy first, always. Your information stays safe, your business stays protected, and your automations scale as you grow. Whether it's custom models, enterprise grade security, or round-the-clock support, we're here to make sure your AI works the way you need it to—no compromises."
+              mb="44px"
+            />
 
-              <div
-                className="mb-12 max-w-[570px] lg:mb-0"
-                data-wow-delay=".15s"
-              >
-                <div className="mx-[-12px] flex flex-wrap">
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Local AI Deployment" />
-                    <List text="Data Privacy First" />
-                    <List text="Custom AI Models" />
-                  </div>
+            <div
+              className="mb-12 max-w-[570px] lg:mb-0"
+              data-wow-delay=".15s"
+            >
+              <div className="mx-[-12px] flex flex-wrap">
+                <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
+                  <List text="Local AI Deployment" />
+                  <List text="Data Privacy First" />
+                  <List text="Custom AI Models" />
+                </div>
 
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Enterprise Security" />
-                    <List text="24/7 Support" />
-                    <List text="Scalable Solutions" />
-                  </div>
+                <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
+                  <List text="Enterprise Security" />
+                  <List text="High Availability" />
+                  <List text="Scalable Solutions" />
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="w-full px-4 lg:w-1/2">
-              <div className="relative flex items-center justify-center min-h-[400px]">
-                <div className="transform translate-y-[-100px]">
-                  <AnimatedCubes />
-                </div>
+          <div className="w-full px-4 lg:w-1/2">
+            <div className="relative flex items-center justify-center min-h-[400px]">
+              <div className="transform translate-y-[-50px]">
+                <AnimatedCubes />
               </div>
             </div>
           </div>

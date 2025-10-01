@@ -73,7 +73,7 @@ const ComprehensiveAbout = () => {
             <div className="w-full px-4 lg:w-1/2">
               <SectionTitle
                 title="Meet Toraflow - Your AI Transformation Partner"
-                paragraph="We are a passionate team of 4 core technicians with over 15 years of combined experience in IT. We're motivated, open-minded, and love what we do. There are no limitations to what we can build for you."
+                paragraph="We are a passionate team of technicians with over 15 years of experience in IT field. We're motivated, open-minded, and love what we do. There are no limitations to what we can build for you."
                 mb="44px"
               />
 
@@ -194,80 +194,93 @@ const ComprehensiveAbout = () => {
         </div>
       </section>
 
-      {/* Experience Section */}
+      {/* Why TORAFLOW Section */}
       <section className="py-16 md:py-20 lg:py-28 bg-gray-light dark:bg-bg-color-dark">
         <div className="container">
-          <div className="-mx-4 flex flex-wrap items-center">
-            <div className="w-full px-4 lg:w-1/2">
-              <h2 className="mb-8 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight">
-                Proven Track Record
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="mr-4 mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                    <Building2 className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
-                      Top Company Projects
-                    </h3>
-                    <p className="text-body-color">
-                      Our team members have contributed to major projects at leading technology companies, bringing enterprise-level expertise to every engagement.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="mr-4 mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                    <Wrench className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
-                      Full-Stack Infrastructure
-                    </h3>
-                    <p className="text-body-color">
-                      We&apos;ve built complete offices, designed datacenters, and deployed cloud applications from the ground up.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="mr-4 mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                    <BookOpen className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
-                      Continuous Learning
-                    </h3>
-                    <p className="text-body-color">
-                      We constantly evolve our skills and stay ahead of technology trends to deliver the best solutions for our clients.
-                    </p>
-                  </div>
-                </div>
+          <SectionTitle
+            title="Why Choose TORAFLOW for Your AI Solutions"
+            paragraph="Our team combines deep technical expertise with a passion for innovation, delivering AI solutions that are secure, scalable, and tailored to your unique business needs."
+            center
+            mb="80px"
+          />
+          
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {/* Local AI Expertise */}
+            <div className="group rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-dark">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Shield className="h-8 w-8 text-primary" />
               </div>
+              <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
+                Local AI Deployment
+              </h3>
+              <p className="text-body-color leading-relaxed">
+                We specialize in deploying AI solutions directly in your environment, ensuring complete data sovereignty and compliance with enterprise security requirements.
+              </p>
             </div>
-            
-            <div className="w-full px-4 lg:w-1/2">
-              <div className="mt-12 lg:mt-0">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center">
-                    <div className="mb-2 text-4xl font-bold text-primary">15+</div>
-                    <p className="text-body-color">Years Experience</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="mb-2 text-4xl font-bold text-primary">100+</div>
-                    <p className="text-body-color">Projects Delivered</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="mb-2 text-4xl font-bold text-primary">4</div>
-                    <p className="text-body-color">Core Team Members</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="mb-2 text-4xl font-bold text-primary">24/7</div>
-                    <p className="text-body-color">Support Available</p>
-                  </div>
-                </div>
+
+            {/* Custom Solutions */}
+            <div className="group rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-dark">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Wrench className="h-8 w-8 text-primary" />
               </div>
+              <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
+                Custom AI Models
+              </h3>
+              <p className="text-body-color leading-relaxed">
+                Every business is unique. We build bespoke AI solutions tailored to your specific processes, from RAG chatbots to complex automation workflows.
+              </p>
+            </div>
+
+            {/* Enterprise Experience */}
+            <div className="group rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-dark">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Building2 className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
+                Enterprise Experience
+              </h3>
+              <p className="text-body-color leading-relaxed">
+                Our team brings expertise from Fortune 500 companies and cutting-edge startups, understanding both scale and innovation requirements.
+              </p>
+            </div>
+
+            {/* Security First */}
+            <div className="group rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-dark">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Monitor className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
+                Security & Privacy
+              </h3>
+              <p className="text-body-color leading-relaxed">
+                Built with privacy-by-design principles, our AI systems include enterprise-grade encryption, audit trails, and compliance reporting.
+              </p>
+            </div>
+
+            {/* No Limitations */}
+            <div className="group rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-dark">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Target className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
+                No Limitations
+              </h3>
+              <p className="text-body-color leading-relaxed">
+                We thrive on challenges others consider impossible. Complex integrations, custom hardware, bleeding-edge AI - we find a way to make it work.
+              </p>
+            </div>
+
+            {/* Long-term Partnership */}
+            <div className="group rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-dark">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Handshake className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
+                Partnership Approach
+              </h3>
+              <p className="text-body-color leading-relaxed">
+                We don&apos;t just build and leave. Our team becomes your technology partner, providing ongoing support and evolution as your needs grow.
+              </p>
             </div>
           </div>
         </div>

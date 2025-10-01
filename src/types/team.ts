@@ -4,6 +4,7 @@ export type TeamMember = {
   position: string;
   description: string;
   image: string;
+  backgroundColor: string; // For card background color
   socialLinks: {
     twitter?: string;
     linkedin?: string;

@@ -1,9 +1,7 @@
 import AboutSectionOne from "@/components/About/AboutSectionOne";
-// import AboutSectionTwo from "@/components/About/AboutSectionTwo";
 import Brands from "@/components/Brands";
 import ScrollUp from "@/components/Common/ScrollUp";
 import Contact from "@/components/Contact";
-import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import RagFlow from "@/components/RagFlow";
 import Team from "@/components/Team";
@@ -21,12 +19,10 @@ export default function Home() {
     <>
       <ScrollUp />
       <Hero />
-      <Features />
+      <AboutSectionOne />
       <RagFlow />
       <Brands />
-      <AboutSectionOne />
       <Team />
-      {/* <AboutSectionTwo /> */}
       <Testimonials />
       <Contact />
     </>

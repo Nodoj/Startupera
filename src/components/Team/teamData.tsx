@@ -7,6 +7,7 @@ const teamData: TeamMember[] = [
     position: "CEO & Founder",
     description: "Visionary leader driving AI innovation and strategic growth. Expert in business development and AI strategy with 10+ years of experience in tech leadership.",
     image: "/images/team/kaxa.png",
+    backgroundColor: "#4A5568", // Dark gray-blue
     socialLinks: {
       linkedin: "https://linkedin.com/in/kaxa",
       twitter: "https://twitter.com/kaxa",
@@ -19,6 +20,7 @@ const teamData: TeamMember[] = [
     position: "CTO & Co-Founder",
     description: "Technical architect specializing in AI systems and local deployments. Leading our engineering team to build secure, scalable AI solutions for enterprises.",
     image: "/images/team/nodo.jpg",
+    backgroundColor: "#D69E2E", // Golden orange
     socialLinks: {
       linkedin: "https://linkedin.com/in/nodo",
       github: "https://github.com/nodo",
@@ -31,6 +33,7 @@ const teamData: TeamMember[] = [
     position: "COO",
     description: "Operations expert ensuring seamless project delivery and client satisfaction. Specializes in process optimization and team coordination for AI implementations.",
     image: "/images/team/merab.png",
+    backgroundColor: "#A0AEC0", // Light gray-blue
     socialLinks: {
       linkedin: "https://linkedin.com/in/merab",
       email: "merab@company.com"
@@ -42,6 +45,7 @@ const teamData: TeamMember[] = [
     position: "CPAO (Chief Product & AI Officer)",
     description: "Product strategist and AI specialist driving innovation in our AI solutions. Expert in machine learning, product development, and AI ethics.",
     image: "/images/team/vaja.png",
+    backgroundColor: "#9F7AEA", // Purple
     socialLinks: {
       linkedin: "https://linkedin.com/in/vaja",
       github: "https://github.com/vaja",

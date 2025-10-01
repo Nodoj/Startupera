@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
 import {
   ReactFlow,
   Controls,
@@ -292,10 +293,10 @@ const RagFlow = () => {
     <section id="ragflow" className="dark:bg-bg-color-dark bg-gray-light py-16 md:py-20 lg:py-28">
         <div className="container">
         <SectionTitle
-          title={getDiagramTitle()}
-          paragraph={getDiagramDescription()}
+          title="Explore Our AI Solutions"
+          paragraph="Interactive visualizations of our custom AI automation workflows. Click and explore how we build intelligent systems that transform your business processes with local deployment and enterprise security."
           center
-          mb="80px"
+          mb="50px"
         />
 
         <div className="relative">
@@ -412,6 +413,19 @@ const RagFlow = () => {
               <div className="w-4 h-4 bg-transparent border-2 border-blue-500 rounded"></div>
               <span className="text-sm text-body-color dark:text-body-color-dark">Animated Flow</span>
             </div>
+          </div>
+
+          {/* Explore More Button */}
+          <div className="mt-12 text-center">
+            <Link
+              href="/flows"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors duration-200 shadow-lg hover:shadow-xl"
+            >
+              <span>Explore More Automation Flows</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       </div>

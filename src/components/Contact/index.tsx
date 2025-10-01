@@ -1,4 +1,6 @@
-const Contact = () => {
+import { submitContactForm } from '@/lib/actions/contact'
+
+const Contact = ({ searchParams }: { searchParams?: { success?: string; error?: string } }) => {
   return (
     <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
       <div className="container">
@@ -14,7 +16,24 @@ const Contact = () => {
               <p className="mb-12 text-base font-medium text-body-color">
                 Get in touch with our AI experts to discuss your project and discover how we can help you implement secure, local AI solutions.
               </p>
-              <form>
+              
+              {searchParams?.success && (
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                  <p className="text-green-800 dark:text-green-200 text-sm">
+                    {searchParams.success}
+                  </p>
+                </div>
+              )}
+              
+              {searchParams?.error && (
+                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-red-800 dark:text-red-200 text-sm">
+                    {searchParams.error}
+                  </p>
+                </div>
+              )}
+              
+              <form action={submitContactForm}>
                 <div className="-mx-4 flex flex-wrap">
                   <div className="w-full px-4 md:w-1/2">
                     <div className="mb-8">
@@ -27,6 +46,7 @@ const Contact = () => {
                       <input
                         type="text"
                         name="name"
+                        required
                         placeholder="Enter your full name"
                         className="border-stroke w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-hidden focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       />
@@ -43,6 +63,7 @@ const Contact = () => {
                       <input
                         type="email"
                         name="email"
+                        required
                         placeholder="Enter your business email"
                         className="border-stroke w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-hidden focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       />
@@ -91,6 +112,7 @@ const Contact = () => {
                       <textarea
                         name="message"
                         rows={5}
+                        required
                         placeholder="Tell us about your AI project, goals, and how we can help transform your business..."
                         className="border-stroke w-full resize-none rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-hidden focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       ></textarea>
