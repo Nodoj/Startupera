@@ -1,6 +1,8 @@
 import Link from 'next/link'
-import { Plus, Search, Filter, Eye, Edit, Trash2 } from 'lucide-react'
+import { adminTheme } from '@/styles/admin-theme'
+import { Plus, Search, Filter, Eye, Edit } from 'lucide-react'
 import { getFlows } from '@/lib/actions/flows'
+import DeleteFlowButton from '@/components/Admin/DeleteFlowButton'
 
 export default async function AdminFlowsPage() {
   const flows = await getFlows()
@@ -10,24 +12,24 @@ export default async function AdminFlowsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className={adminTheme.typography.h1}>
             AI Automation Flows
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className={`${adminTheme.typography.body} mt-1`}>
             Manage your AI automation flow content and documentation.
           </p>
         </div>
         <Link
           href="/admin/flows/new"
-          className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+          className={adminTheme.button.primary}
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4 mr-2 inline-flex" />
           Create New Flow
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
@@ -35,18 +37,18 @@ export default async function AdminFlowsPage() {
               <input
                 type="text"
                 placeholder="Search flows..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent"
+                className={`pl-10 ${adminTheme.input.base}`}
               />
             </div>
           </div>
           <div className="flex gap-2">
-            <select className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent">
+            <select className={adminTheme.input.base}>
               <option value="">All Categories</option>
               <option value="automation">Automation</option>
               <option value="ai-chatbot">AI Chatbot</option>
               <option value="data-processing">Data Processing</option>
             </select>
-            <select className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent">
+            <select className={adminTheme.input.base}>
               <option value="">All Status</option>
               <option value="published">Published</option>
               <option value="draft">Draft</option>
@@ -56,12 +58,12 @@ export default async function AdminFlowsPage() {
       </div>
 
       {/* Flows Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className={adminTheme.table.wrapper}>
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+          <table className={adminTheme.table.base}>
+            <thead className={adminTheme.table.header}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className={adminTheme.table.headerCell}>
                   Flow
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -166,22 +168,22 @@ export default async function AdminFlowsPage() {
                       {new Date(flow.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
+                      <div className="flex items-center justify-end space-x-3">
                         <Link
                           href={`/flows/${flow.id}`}
-                          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                          className="text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                          title="View flow"
                         >
                           <Eye className="h-4 w-4" />
                         </Link>
                         <Link
                           href={`/admin/flows/${flow.id}/edit`}
-                          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                          className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          title="Edit flow"
                         >
                           <Edit className="h-4 w-4" />
                         </Link>
-                        <button className="text-gray-400 hover:text-red-600 dark:hover:text-red-400">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <DeleteFlowButton flowId={flow.id} flowTitle={flow.title} />
                       </div>
                     </td>
                   </tr>

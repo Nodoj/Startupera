@@ -195,3 +195,7 @@ export async function getFlowTechnologies() {
   const uniqueTechnologies = [...new Set(allTechnologies)]
   return uniqueTechnologies
 }
+
+export async function getPublishedFlows() {
+  return getFlows({ status: 'published' })
+}

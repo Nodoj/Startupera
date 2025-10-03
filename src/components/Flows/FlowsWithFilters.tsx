@@ -2,11 +2,15 @@
 
 import { useState, useMemo } from "react";
 import SingleFlow from "./SingleFlow";
-import flowsData from "./flowsData";
 import ContentFilter, { FilterState } from "@/components/Common/ContentFilter";
 import { filterContent, sortContent, generateFilterConfig } from "@/utils/filterUtils";
+import { RouteOff } from "lucide-react";
 
-const FlowsWithFilters = () => {
+interface FlowsWithFiltersProps {
+  dbFlows?: any[];
+}
+
+const FlowsWithFilters = ({ dbFlows = [] }: FlowsWithFiltersProps) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -21,14 +25,40 @@ const FlowsWithFilters = () => {
     sortOrder: 'desc'
   });
 
+  // Convert database flows to display format
+  const allFlows = useMemo(() => {
+    // Convert DB flows to match the flowsData format
+    const convertedDbFlows = dbFlows.map(flow => ({
+      id: flow.id,
+      title: flow.title,
+      description: flow.description,
+      paragraph: flow.description, // Add paragraph for compatibility
+      image: flow.featured_image || "/images/flows/default.jpg",
+      category: flow.category,
+      tags: flow.tags || [],
+      complexity: flow.complexity,
+      timeToImplement: flow.time_to_implement || "1-2 weeks",
+      technologies: flow.technologies || [],
+      author: flow.profiles?.full_name || "TORAFLOW Team",
+      date: new Date(flow.created_at).toLocaleDateString(),
+      publishDate: new Date(flow.created_at).toLocaleDateString(), // Add publishDate
+      views: flow.views || 0,
+      featured: flow.featured || false,
+      roi: flow.roi || "High",
+    }));
+    
+    // Only use database flows (no static data)
+    return convertedDbFlows;
+  }, [dbFlows]);
+
   // Generate filter configuration from flows data
-  const filterConfig = useMemo(() => generateFilterConfig(flowsData, 'flows'), []);
+  const filterConfig = useMemo(() => generateFilterConfig(allFlows, 'flows'), [allFlows]);
 
   // Apply filters and sorting
   const filteredAndSortedFlows = useMemo(() => {
-    const filtered = filterContent(flowsData, filters, 'flows');
+    const filtered = filterContent(allFlows, filters, 'flows');
     return sortContent(filtered, filters.sortBy, filters.sortOrder, 'flows');
-  }, [filters]);
+  }, [allFlows, filters]);
 
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters);
@@ -46,7 +76,7 @@ const FlowsWithFilters = () => {
           filterConfig={filterConfig}
           onFilterChange={handleFilterChange}
           onViewModeChange={handleViewModeChange}
-          totalItems={flowsData.length}
+          totalItems={allFlows.length}
           filteredItems={filteredAndSortedFlows.length}
           contentType="flows"
         />
@@ -65,7 +95,8 @@ const FlowsWithFilters = () => {
           ) : (
             <div className={viewMode === 'list' ? 'w-full text-center py-16' : 'col-span-full text-center py-16'}>
               <div className="mx-auto max-w-md">
-                <div className="mb-4 text-6xl">🔍</div>
+                <div className="mb-4 text-6xl justify-center items-center"><RouteOff size={64} /></div>
+                
                 <h3 className="mb-2 text-xl font-semibold text-black dark:text-white">
                   No flows found
                 </h3>

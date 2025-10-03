@@ -1,6 +1,7 @@
 import FlowsWithFilters from "@/components/Flows/FlowsWithFilters";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
+import { getPublishedFlows } from "@/lib/actions/flows";
 
 export const metadata: Metadata = {
   title: "Automation Flows | Real-World AI Solutions & Case Studies",
@@ -8,14 +9,17 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-const FlowsPage = () => {
+const FlowsPage = async () => {
+  // Fetch published flows from database
+  const dbFlows = await getPublishedFlows();
+  
   return (
     <>
       <Breadcrumb
         pageName="Automation Flows"
         description="Discover real-world automation solutions that transform businesses. From intelligent file processing to enterprise-grade AI support systems - see what's possible with our expertise."
       />
-      <FlowsWithFilters />
+      <FlowsWithFilters dbFlows={dbFlows} />
     </>
   );
 };
