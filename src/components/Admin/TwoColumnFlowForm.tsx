@@ -8,6 +8,9 @@ import { adminTheme } from '@/styles/admin-theme'
 import { Save, ArrowLeft, Plus, X, Upload, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import RichTextEditor from './RichTextEditor'
+import CustomSelect from './CustomSelect'
+import CustomMultiSelect from './CustomMultiSelect'
 
 interface TwoColumnFlowFormProps {
   initialData?: any
@@ -17,6 +20,7 @@ interface TwoColumnFlowFormProps {
 export default function TwoColumnFlowForm({ initialData, isEditing = false }: TwoColumnFlowFormProps) {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const galleryInputRef = useRef<HTMLInputElement>(null)
   
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState(initialData?.status || 'draft')
@@ -24,26 +28,48 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
   const [imagePreview, setImagePreview] = useState(initialData?.featured_image || '')
   const [isDragging, setIsDragging] = useState(false)
   
+  // Gallery state
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([])
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.gallery || [])
+  const [isGalleryDragging, setIsGalleryDragging] = useState(false)
+  
   // Technologies state
   const [technologies, setTechnologies] = useState<string[]>(initialData?.technologies || [])
-  const [customTech, setCustomTech] = useState('')
-  const [showCustomTech, setShowCustomTech] = useState(false)
+  const [technologyOptions, setTechnologyOptions] = useState([
+    { value: 'OpenAI', label: 'OpenAI' },
+    { value: 'LangChain', label: 'LangChain' },
+    { value: 'Pinecone', label: 'Pinecone' },
+    { value: 'Supabase', label: 'Supabase' },
+    { value: 'Next.js', label: 'Next.js' },
+    { value: 'React', label: 'React' },
+    { value: 'Python', label: 'Python' },
+    { value: 'Node.js', label: 'Node.js' },
+    { value: 'TensorFlow', label: 'TensorFlow' },
+    { value: 'PyTorch', label: 'PyTorch' },
+    { value: 'Hugging Face', label: 'Hugging Face' },
+    { value: 'Anthropic', label: 'Anthropic' },
+    { value: 'Google AI', label: 'Google AI' },
+    { value: 'Azure AI', label: 'Azure AI' },
+    { value: 'AWS', label: 'AWS' }
+  ])
   
-  // Category state (now multi-select like technologies)
+  // Category state
   const [categories, setCategories] = useState<string[]>(initialData?.categories || [])
-  const [customCategory, setCustomCategory] = useState('')
-  const [showCustomCategory, setShowCustomCategory] = useState(false)
+  const [categoryOptions, setCategoryOptions] = useState([
+    { value: 'Automation', label: 'Automation' },
+    { value: 'AI Chatbot', label: 'AI Chatbot' },
+    { value: 'Data Processing', label: 'Data Processing' },
+    { value: 'Content Generation', label: 'Content Generation' },
+    { value: 'Business Intelligence', label: 'Business Intelligence' }
+  ])
 
-  const predefinedTechnologies = [
-    'OpenAI', 'LangChain', 'Pinecone', 'Supabase', 'Next.js', 'React',
-    'Python', 'Node.js', 'TensorFlow', 'PyTorch', 'Hugging Face',
-    'Anthropic', 'Google AI', 'Azure AI', 'AWS'
-  ]
+  // Complexity state
+  const [complexity, setComplexity] = useState(initialData?.complexity || '')
 
-  const predefinedCategories = [
-    'Automation', 'AI Chatbot', 'Data Processing', 
-    'Content Generation', 'Business Intelligence'
-  ]
+  // Blog content state
+  const [excerpt, setExcerpt] = useState(initialData?.excerpt || '')
+  const [content, setContent] = useState(initialData?.content || '')
+  const [readingTime, setReadingTime] = useState(initialData?.reading_time || '')
 
   const handleImageSelect = (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -103,24 +129,79 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
     }
   }
 
-  const addTechnology = (tech: string) => {
-    if (tech && !technologies.includes(tech)) {
-      setTechnologies([...technologies, tech])
-    }
+  // Gallery handlers
+  const handleGallerySelect = (files: FileList | null) => {
+    if (!files) return
+
+    const validFiles: File[] = []
+    const newPreviews: string[] = []
+
+    Array.from(files).forEach((file) => {
+      if (!file.type.startsWith('image/')) {
+        alert(`${file.name} is not an image file`)
+        return
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name} is too large (max 5MB)`)
+        return
+      }
+
+      validFiles.push(file)
+
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        newPreviews.push(reader.result as string)
+        if (newPreviews.length === validFiles.length) {
+          setGalleryPreviews([...galleryPreviews, ...newPreviews])
+        }
+      }
+      reader.readAsDataURL(file)
+    })
+
+    setGalleryFiles([...galleryFiles, ...validFiles])
   }
 
-  const removeTechnology = (tech: string) => {
-    setTechnologies(technologies.filter(t => t !== tech))
+  const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleGallerySelect(e.target.files)
   }
 
-  const addCategory = (cat: string) => {
-    if (cat && !categories.includes(cat)) {
-      setCategories([...categories, cat])
-    }
+  const handleGalleryDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsGalleryDragging(true)
   }
 
-  const removeCategory = (cat: string) => {
-    setCategories(categories.filter(c => c !== cat))
+  const handleGalleryDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsGalleryDragging(false)
+  }
+
+  const handleGalleryDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsGalleryDragging(false)
+    handleGallerySelect(e.dataTransfer.files)
+  }
+
+  const removeGalleryImage = (index: number) => {
+    setGalleryPreviews(galleryPreviews.filter((_, i) => i !== index))
+    setGalleryFiles(galleryFiles.filter((_, i) => i !== index))
+  }
+
+  // Handle adding custom technology
+  const handleAddCustomTech = (value: string) => {
+    const newOption = { value, label: value }
+    setTechnologyOptions([...technologyOptions, newOption])
+    setTechnologies([...technologies, value])
+  }
+
+  // Handle adding custom category
+  const handleAddCustomCategory = (value: string) => {
+    const newOption = { value, label: value }
+    setCategoryOptions([...categoryOptions, newOption])
+    setCategories([...categories, value])
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -130,20 +211,34 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
     try {
       const formData = new FormData(e.currentTarget)
       
-      // Upload image only when submitting the form
+      // Upload featured image
       let uploadedImageUrl = initialData?.featured_image || null
       if (imageFile) {
         uploadedImageUrl = await uploadFlowImage(imageFile)
         if (!uploadedImageUrl) {
-          alert('Failed to upload image. Please try again.')
+          alert('Failed to upload featured image. Please try again.')
           setIsSubmitting(false)
           return
+        }
+      }
+
+      // Upload gallery images
+      const uploadedGalleryUrls: string[] = [...(initialData?.gallery || [])]
+      if (galleryFiles.length > 0) {
+        for (const file of galleryFiles) {
+          const url = await uploadFlowImage(file)
+          if (url) {
+            uploadedGalleryUrls.push(url)
+          }
         }
       }
       
       const flowData = {
         title: formData.get('title') as string,
-        description: formData.get('description') as string,
+        description: excerpt, // Use excerpt for description (backward compatibility)
+        excerpt: excerpt, // Also store in excerpt field
+        content: content,
+        reading_time: readingTime ? parseInt(readingTime) : null,
         category: categories[0] || '', // Use first category for backward compatibility
         categories: categories, // Store all categories
         complexity: formData.get('complexity') as string,
@@ -151,6 +246,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
         roi: formData.get('roi') as string,
         technologies: technologies,
         featured_image: uploadedImageUrl,
+        gallery: uploadedGalleryUrls, // Gallery images
         status: status,
       }
 
@@ -189,61 +285,142 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
           {/* LEFT COLUMN (2/3 width) */}
           <div className="lg:col-span-2 space-y-6">
             
-            {/* 1. Image Upload */}
+            {/* 1. Images (Featured + Gallery) */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
-              <h3 className={`${adminTheme.typography.h3} mb-4`}>Featured Image</h3>
+              <h3 className={`${adminTheme.typography.h3} mb-6`}>Images</h3>
               
-              {imagePreview ? (
-                <div className="relative">
-                  <div className="relative w-full h-80 rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700">
-                    <Image
-                      src={imagePreview}
-                      alt="Preview"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-lg"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              ) : (
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-xl p-16 text-center cursor-pointer transition-all ${
-                    isDragging
-                      ? 'border-primary bg-primary/10 scale-105'
-                      : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 hover:border-primary'
-                  }`}
-                >
-                  <div className="flex flex-col items-center">
-                    <Upload className={`h-16 w-16 mb-4 transition-colors ${
-                      isDragging ? 'text-primary' : 'text-gray-400'
-                    }`} />
-                    <p className="text-gray-600 dark:text-gray-400 mb-2 font-medium text-lg">
-                      {isDragging ? 'Drop image here' : 'Click to upload or drag and drop'}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500">
-                      PNG, JPG, GIF up to 5MB
-                    </p>
-                  </div>
-                </div>
-              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Featured Image Column */}
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                    Featured Image *
+                  </h4>
+                  
+                  {imagePreview ? (
+                    <div className="relative">
+                      <div className="relative w-full h-64 rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700">
+                        <Image
+                          src={imagePreview}
+                          alt="Preview"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-lg"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all h-64 flex items-center justify-center ${
+                        isDragging
+                          ? 'border-primary bg-primary/10 scale-105'
+                          : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 hover:border-primary'
+                      }`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <Upload className={`h-12 w-12 mb-3 transition-colors ${
+                          isDragging ? 'text-primary' : 'text-gray-400'
+                        }`} />
+                        <p className="text-gray-600 dark:text-gray-400 mb-1 font-medium text-sm">
+                          {isDragging ? 'Drop here' : 'Upload featured image'}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500">
+                          PNG, JPG, GIF • Max 5MB
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                </div>
+
+                {/* Gallery Images Column */}
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                    Gallery Images (Optional)
+                  </h4>
+                  
+                  {/* Gallery Grid */}
+                  {galleryPreviews.length > 0 && (
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      {galleryPreviews.map((preview, index) => (
+                        <div key={index} className="relative group">
+                          <div className="relative w-full h-24 rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700">
+                            <Image
+                              src={preview}
+                              alt={`Gallery ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(index)}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors shadow-lg opacity-0 group-hover:opacity-100"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Upload Area */}
+                  <div
+                    onClick={() => galleryInputRef.current?.click()}
+                    onDragOver={handleGalleryDragOver}
+                    onDragLeave={handleGalleryDragLeave}
+                    onDrop={handleGalleryDrop}
+                    className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
+                      galleryPreviews.length > 0 ? 'h-auto' : 'h-64 flex items-center justify-center'
+                    } ${
+                      isGalleryDragging
+                        ? 'border-primary bg-primary/10 scale-105'
+                        : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 hover:border-primary'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center">
+                      <Plus className={`h-10 w-10 mb-2 transition-colors ${
+                        isGalleryDragging ? 'text-primary' : 'text-gray-400'
+                      }`} />
+                      <p className="text-gray-600 dark:text-gray-400 mb-1 font-medium text-sm">
+                        {isGalleryDragging ? 'Drop here' : 'Add gallery images'}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500">
+                        Multiple files • Max 5MB each
+                      </p>
+                    </div>
+                  </div>
+
+                  <input
+                    ref={galleryInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleGalleryUpload}
+                    className="hidden"
+                  />
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                <strong>Featured image</strong> appears as the main hero image. <strong>Gallery images</strong> will be displayed in a carousel below.
+              </p>
             </div>
 
             {/* 2. Flow Title */}
@@ -262,20 +439,37 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
               />
             </div>
 
-            {/* 3. Description */}
+            {/* 3. Excerpt (replaces both description and excerpt) */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
-              <label htmlFor="description" className={`${adminTheme.typography.label} mb-3 block`}>
-                Description *
+              <label htmlFor="excerpt" className={`${adminTheme.typography.label} mb-3 block`}>
+                Excerpt *
               </label>
               <textarea
-                id="description"
-                name="description"
+                id="excerpt"
+                name="excerpt"
                 required
-                rows={6}
-                defaultValue={initialData?.description}
+                rows={4}
+                value={excerpt}
+                onChange={(e) => setExcerpt(e.target.value)}
                 className={`${adminTheme.input.base} resize-none`}
-                placeholder="Describe what this flow does, its benefits, and use cases..."
+                placeholder="A compelling introduction (2-3 sentences). Used in flow cards, below title, and for SEO meta description..."
               />
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                This excerpt will be used in: flow listing cards, below the title on the detail page, and as the meta description for SEO.
+              </p>
+            </div>
+
+            {/* 5. Main Content (Rich Text Editor) */}
+            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
+              <RichTextEditor
+                content={content}
+                onChange={setContent}
+                label="Main Content"
+                placeholder="Write the detailed content for this flow. Use headings, lists, and formatting to create engaging content..."
+              />
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                This is the main blog-style content that will appear in the overview section.
+              </p>
             </div>
           </div>
 
@@ -317,101 +511,36 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                 Categories
               </label>
               
-              <select
-                value={showCustomCategory ? 'custom' : ''}
-                onChange={(e) => {
-                  if (e.target.value === 'custom') {
-                    setShowCustomCategory(true)
-                  } else if (e.target.value) {
-                    addCategory(e.target.value)
-                    e.target.value = ''
-                  }
-                }}
-                className={`${adminTheme.input.base} mb-3`}
-              >
-                <option value="">Add category</option>
-                {predefinedCategories.filter(c => !categories.includes(c)).map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-                <option value="custom">+ Add Custom</option>
-              </select>
-
-              {showCustomCategory && (
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={customCategory}
-                    onChange={(e) => setCustomCategory(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault()
-                        if (customCategory.trim()) {
-                          addCategory(customCategory.trim())
-                          setCustomCategory('')
-                          setShowCustomCategory(false)
-                        }
-                      }
-                    }}
-                    placeholder="Enter category"
-                    className={`flex-1 ${adminTheme.input.base}`}
-                    autoFocus
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (customCategory.trim()) {
-                        addCategory(customCategory.trim())
-                        setCustomCategory('')
-                        setShowCustomCategory(false)
-                      }
-                    }}
-                    className={adminTheme.button.primary}
-                  >
-                    Add
-                  </button>
-                </div>
-              )}
-
-              {categories.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((cat) => (
-                    <span
-                      key={cat}
-                      className="inline-flex items-center px-3 py-1.5 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium"
-                    >
-                      {cat}
-                      <button
-                        type="button"
-                        onClick={() => removeCategory(cat)}
-                        className="ml-2 hover:text-blue-600 dark:hover:text-blue-400"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
+              <CustomMultiSelect
+                options={categoryOptions}
+                value={categories}
+                onChange={setCategories}
+                placeholder="Select categories"
+                searchable={true}
+                allowCustom={true}
+                onAddCustom={handleAddCustomCategory}
+              />
             </div>
 
             {/* Complexity / Time to Implement */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="complexity" className={`${adminTheme.typography.label} mb-2 block`}>
+                  <label className={`${adminTheme.typography.label} mb-2 block`}>
                     Complexity *
                   </label>
-                  <select
-                    id="complexity"
-                    name="complexity"
-                    required
-                    defaultValue={initialData?.complexity}
-                    className={adminTheme.input.base}
-                  >
-                    <option value="">Select</option>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                  </select>
+                  <CustomSelect
+                    options={[
+                      { value: 'beginner', label: 'Beginner' },
+                      { value: 'intermediate', label: 'Intermediate' },
+                      { value: 'advanced', label: 'Advanced' }
+                    ]}
+                    value={complexity}
+                    onChange={setComplexity}
+                    placeholder="Select complexity level"
+                    required={true}
+                  />
+                  <input type="hidden" name="complexity" value={complexity} required />
                 </div>
 
                 <div>
@@ -445,86 +574,41 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
               />
             </div>
 
+            {/* Reading Time */}
+            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
+              <label htmlFor="reading_time" className={`${adminTheme.typography.label} mb-3 block`}>
+                Reading Time (minutes)
+              </label>
+              <input
+                type="number"
+                id="reading_time"
+                name="reading_time"
+                value={readingTime}
+                onChange={(e) => setReadingTime(e.target.value)}
+                className={adminTheme.input.base}
+                placeholder="e.g., 5"
+                min="1"
+              />
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Estimated time to read the full article
+              </p>
+            </div>
+
             {/* Technologies */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
               <label className={`${adminTheme.typography.label} mb-3 block`}>
                 Technologies
               </label>
               
-              <select
-                value={showCustomTech ? 'custom' : ''}
-                onChange={(e) => {
-                  if (e.target.value === 'custom') {
-                    setShowCustomTech(true)
-                  } else if (e.target.value) {
-                    addTechnology(e.target.value)
-                    e.target.value = ''
-                  }
-                }}
-                className={`${adminTheme.input.base} mb-3`}
-              >
-                <option value="">Add technology</option>
-                {predefinedTechnologies.filter(t => !technologies.includes(t)).map((tech) => (
-                  <option key={tech} value={tech}>{tech}</option>
-                ))}
-                <option value="custom">+ Add Custom</option>
-              </select>
-
-              {showCustomTech && (
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={customTech}
-                    onChange={(e) => setCustomTech(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault()
-                        if (customTech.trim()) {
-                          addTechnology(customTech.trim())
-                          setCustomTech('')
-                          setShowCustomTech(false)
-                        }
-                      }
-                    }}
-                    placeholder="Enter technology"
-                    className={`flex-1 ${adminTheme.input.base}`}
-                    autoFocus
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (customTech.trim()) {
-                        addTechnology(customTech.trim())
-                        setCustomTech('')
-                        setShowCustomTech(false)
-                      }
-                    }}
-                    className={adminTheme.button.primary}
-                  >
-                    Add
-                  </button>
-                </div>
-              )}
-
-              {technologies.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="inline-flex items-center px-3 py-1.5 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium"
-                    >
-                      {tech}
-                      <button
-                        type="button"
-                        onClick={() => removeTechnology(tech)}
-                        className="ml-2 hover:text-blue-600 dark:hover:text-blue-400"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
+              <CustomMultiSelect
+                options={technologyOptions}
+                value={technologies}
+                onChange={setTechnologies}
+                placeholder="Select technologies"
+                searchable={true}
+                allowCustom={true}
+                onAddCustom={handleAddCustomTech}
+              />
             </div>
           </div>
         </div>

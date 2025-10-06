@@ -19,6 +19,7 @@ import {
   Check,
   Sparkles
 } from "lucide-react";
+import CustomSelect from "@/components/Admin/CustomSelect";
 
 export interface FilterOption {
   value: string;
@@ -180,7 +181,7 @@ const ContentFilter = ({
   return (
     <div className={`mb-8 ${className}`}>
       {/* Enhanced Control Bar with Integrated Search */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-dark/50 backdrop-blur-sm border border-stroke/30 dark:border-stroke-dark/30">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-dark/50 backdrop-blur-sm border border-stroke/30 dark:border-stroke-dark/30 relative z-10">
         {/* Left Section: Results and View Controls */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -245,20 +246,12 @@ const ContentFilter = ({
         {/* Right Section: Sort and Filter Controls */}
         <div className="flex items-center gap-3">
           {/* Sort Dropdown */}
-          <div className="relative">
-            <select
-              value={filters.sortBy}
-              onChange={(e) => updateFilter('sortBy', e.target.value)}
-              className="appearance-none rounded-xl border border-stroke dark:border-stroke-dark bg-white dark:bg-gray-800 px-4 py-2.5 pr-10 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-            >
-              {sortOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <ArrowUpDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color pointer-events-none" />
-          </div>
+          <CustomSelect
+            options={sortOptions}
+            value={filters.sortBy}
+            onChange={(value) => updateFilter('sortBy', value)}
+            className="w-48"
+          />
 
           {/* Sort Order Toggle */}
           <button
@@ -392,21 +385,18 @@ const ContentFilter = ({
                   </div>
                   Category
                 </label>
-                <div className="relative">
-                  <select
-                    value={filters.selectedCategory}
-                    onChange={(e) => updateFilter('selectedCategory', e.target.value)}
-                    className="w-full rounded-xl border-2 border-stroke/50 dark:border-stroke-dark/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                  >
-                    <option value="all">All Categories</option>
-                    {filterConfig.categories.map(category => (
-                      <option key={category.value} value={category.value}>
-                        {category.label} {category.count && `(${category.count})`}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color pointer-events-none" />
-                </div>
+                <CustomSelect
+                  options={[
+                    { value: 'all', label: 'All Categories' },
+                    ...filterConfig.categories.map(cat => ({
+                      value: cat.value,
+                      label: `${cat.label}${cat.count ? ` (${cat.count})` : ''}`
+                    }))
+                  ]}
+                  value={filters.selectedCategory}
+                  onChange={(value) => updateFilter('selectedCategory', value)}
+                  searchable={true}
+                />
               </div>
             )}
 
@@ -419,21 +409,18 @@ const ContentFilter = ({
                   </div>
                   Author
                 </label>
-                <div className="relative">
-                  <select
-                    value={filters.selectedAuthor}
-                    onChange={(e) => updateFilter('selectedAuthor', e.target.value)}
-                    className="w-full rounded-xl border-2 border-stroke/50 dark:border-stroke-dark/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                  >
-                    <option value="all">All Authors</option>
-                    {filterConfig.authors.map(author => (
-                      <option key={author.value} value={author.value}>
-                        {author.label} {author.count && `(${author.count})`}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color pointer-events-none" />
-                </div>
+                <CustomSelect
+                  options={[
+                    { value: 'all', label: 'All Authors' },
+                    ...filterConfig.authors.map(author => ({
+                      value: author.value,
+                      label: `${author.label}${author.count ? ` (${author.count})` : ''}`
+                    }))
+                  ]}
+                  value={filters.selectedAuthor}
+                  onChange={(value) => updateFilter('selectedAuthor', value)}
+                  searchable={true}
+                />
               </div>
             )}
 
@@ -446,21 +433,17 @@ const ContentFilter = ({
                   </div>
                   Year
                 </label>
-                <div className="relative">
-                  <select
-                    value={filters.selectedYear}
-                    onChange={(e) => updateFilter('selectedYear', e.target.value)}
-                    className="w-full rounded-xl border-2 border-stroke/50 dark:border-stroke-dark/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                  >
-                    <option value="all">All Years</option>
-                    {filterConfig.publishYears.map(year => (
-                      <option key={year.value} value={year.value}>
-                        {year.label} {year.count && `(${year.count})`}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color pointer-events-none" />
-                </div>
+                <CustomSelect
+                  options={[
+                    { value: 'all', label: 'All Years' },
+                    ...filterConfig.publishYears.map(year => ({
+                      value: year.value,
+                      label: `${year.label}${year.count ? ` (${year.count})` : ''}`
+                    }))
+                  ]}
+                  value={filters.selectedYear}
+                  onChange={(value) => updateFilter('selectedYear', value)}
+                />
               </div>
             )}
 
@@ -473,21 +456,17 @@ const ContentFilter = ({
                   </div>
                   Complexity
                 </label>
-                <div className="relative">
-                  <select
-                    value={filters.selectedComplexity}
-                    onChange={(e) => updateFilter('selectedComplexity', e.target.value)}
-                    className="w-full rounded-xl border-2 border-stroke/50 dark:border-stroke-dark/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                  >
-                    <option value="all">All Levels</option>
-                    {filterConfig.complexity.map(complexity => (
-                      <option key={complexity.value} value={complexity.value}>
-                        {complexity.label} {complexity.count && `(${complexity.count})`}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color pointer-events-none" />
-                </div>
+                <CustomSelect
+                  options={[
+                    { value: 'all', label: 'All Levels' },
+                    ...filterConfig.complexity.map(level => ({
+                      value: level.value,
+                      label: `${level.label}${level.count ? ` (${level.count})` : ''}`
+                    }))
+                  ]}
+                  value={filters.selectedComplexity}
+                  onChange={(value) => updateFilter('selectedComplexity', value)}
+                />
               </div>
             )}
 
@@ -500,21 +479,17 @@ const ContentFilter = ({
                   </div>
                   Duration
                 </label>
-                <div className="relative">
-                  <select
-                    value={filters.selectedTimeToImplement}
-                    onChange={(e) => updateFilter('selectedTimeToImplement', e.target.value)}
-                    className="w-full rounded-xl border-2 border-stroke/50 dark:border-stroke-dark/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-sm font-medium focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
-                  >
-                    <option value="all">Any Duration</option>
-                    {filterConfig.timeToImplement.map(time => (
-                      <option key={time.value} value={time.value}>
-                        {time.label} {time.count && `(${time.count})`}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color pointer-events-none" />
-                </div>
+                <CustomSelect
+                  options={[
+                    { value: 'all', label: 'Any Duration' },
+                    ...filterConfig.timeToImplement.map(time => ({
+                      value: time.value,
+                      label: `${time.label}${time.count ? ` (${time.count})` : ''}`
+                    }))
+                  ]}
+                  value={filters.selectedTimeToImplement}
+                  onChange={(value) => updateFilter('selectedTimeToImplement', value)}
+                />
               </div>
             )}
           </div>

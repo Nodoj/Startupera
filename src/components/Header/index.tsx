@@ -6,8 +6,13 @@ import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import Button from "@/components/Common/Button";
+import ProfileDropdown from "./ProfileDropdown";
+import { useUser } from "@/hooks/useUser";
+import { LayoutDashboard } from "lucide-react";
 
 const Header = () => {
+  const { user, loading } = useUser();
+  
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
@@ -38,6 +43,7 @@ const Header = () => {
   };
 
   const usePathName = usePathname();
+  const isAdmin = user?.role === 'admin';
 
   return (
     <>
@@ -136,6 +142,57 @@ const Header = () => {
                       )}
                     </li>
                   ))}
+                  
+                  {/* Mobile Auth Links */}
+                  {!loading && (
+                    <li className="lg:hidden">
+                      {user ? (
+                        <>
+                          {isAdmin && (
+                            <Link
+                              href="/admin"
+                              className="flex items-center gap-2 py-2 text-base text-purple-600 dark:text-purple-400 hover:text-primary"
+                              onClick={() => setNavbarOpen(false)}
+                            >
+                              <LayoutDashboard className="h-4 w-4" />
+                              Dashboard
+                            </Link>
+                          )}
+                          <Link
+                            href="/profile"
+                            className="flex py-2 text-base text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
+                            onClick={() => setNavbarOpen(false)}
+                          >
+                            Profile
+                          </Link>
+                          <Link
+                            href="/settings"
+                            className="flex py-2 text-base text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
+                            onClick={() => setNavbarOpen(false)}
+                          >
+                            Settings
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            href="/signin"
+                            className="flex py-2 text-base text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
+                            onClick={() => setNavbarOpen(false)}
+                          >
+                            Sign In
+                          </Link>
+                          <Link
+                            href="/signup"
+                            className="flex py-2 text-base text-primary hover:text-primary/80 dark:text-primary dark:hover:text-primary/80"
+                            onClick={() => setNavbarOpen(false)}
+                          >
+                            Sign Up
+                          </Link>
+                        </>
+                      )}
+                    </li>
+                  )}
                 </ul>
               </nav>
             </div>
@@ -165,21 +222,47 @@ const Header = () => {
             </button>
 
             {/* Auth & Theme - Right */}
-            <div className="flex items-center space-x-4 px-4">
-              <Link
-                href="/signin"
-                className="text-dark hidden px-4 py-2 text-base font-medium hover:opacity-70 md:block dark:text-white"
-              >
-                Sign In
-              </Link>
-              <Button
-                href="/signup"
-                variant="primary"
-                size="sm"
-                className="hidden md:inline-flex"
-              >
-                Sign Up
-              </Button>
+            <div className="flex items-center gap-3 px-4">
+              {!loading && (
+                <>
+                  {user ? (
+                    <>
+                      {/* Dashboard Button for Admins */}
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          className="hidden md:flex items-center gap-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 px-4 py-2 text-sm font-medium text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+                        >
+                          <LayoutDashboard className="h-4 w-4" />
+                          <span>Dashboard</span>
+                        </Link>
+                      )}
+                      
+                      {/* Profile Dropdown */}
+                      <ProfileDropdown user={user} />
+                    </>
+                  ) : (
+                    <>
+                      {/* Sign In / Sign Up for guests */}
+                      <Link
+                        href="/signin"
+                        className="text-dark hidden px-4 py-2 text-base font-medium hover:opacity-70 md:block dark:text-white"
+                      >
+                        Sign In
+                      </Link>
+                      <Button
+                        href="/signup"
+                        variant="primary"
+                        size="sm"
+                        className="hidden md:inline-flex"
+                      >
+                        Sign Up
+                      </Button>
+                    </>
+                  )}
+                </>
+              )}
+              
               <ThemeToggler />
             </div>
           </div>

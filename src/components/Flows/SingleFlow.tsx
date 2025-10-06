@@ -13,7 +13,7 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
   
   if (viewMode === 'list') {
     return (
-      <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 mb-6 border border-stroke/10 dark:border-stroke-dark/10">
+      <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 mb-6 border border-stroke/10 dark:border-stroke-dark/10 z-0">
         <div className="p-6 md:p-8">
           {/* Header Section */}
           <div className="flex items-start justify-between mb-4">
@@ -87,7 +87,7 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
 
   // Grid view (default)
   return (
-    <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 border border-stroke/10 dark:border-stroke-dark/10 h-full">
+    <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 border border-stroke/10 dark:border-stroke-dark/10 h-full z-0">
       <div className="p-6 sm:p-8 md:px-6 md:py-8 lg:p-8 xl:px-5 xl:py-8 2xl:p-8 flex flex-col h-full">
         {/* Header Section */}
         <div className="flex items-start justify-between mb-4">

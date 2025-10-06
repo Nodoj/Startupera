@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
+import { createClient, createBuildClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import type { Database } from '@/types/database'
@@ -198,4 +198,21 @@ export async function getFlowTechnologies() {
 
 export async function getPublishedFlows() {
   return getFlows({ status: 'published' })
+}
+
+// Build-time function for generateStaticParams (no cookies)
+export async function getPublishedFlowIds() {
+  const supabase = createBuildClient()
+  
+  const { data, error } = await supabase
+    .from('flows')
+    .select('id')
+    .eq('status', 'published')
+  
+  if (error) {
+    console.error('Error fetching flow IDs:', error)
+    return []
+  }
+  
+  return data || []
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import StarfieldBackground from "@/components/Appbgs/StarfieldBackground";
+import StarfieldBackground from "@/components/Backgrounds/StarfieldBackground";
 import Button from "@/components/Common/Button";
 import { Bot, UserStar  } from "lucide-react";
 

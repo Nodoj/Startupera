@@ -30,3 +30,27 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# database
+/database
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# logs
+*.log
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# temporary files
+*.tmp
+.temp/

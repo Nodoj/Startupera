@@ -1,4 +1,5 @@
 import AdminSidebar from '@/components/Admin/Sidebar'
+import ProgressBar from '@/components/Admin/ProgressBar'
 import { signOut } from '@/lib/actions/auth'
 import { requireEditor } from '@/lib/utils/rbac'
 
@@ -17,6 +18,7 @@ export default async function AdminLayout({
   
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+      <ProgressBar />
       <AdminSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Admin Header */}

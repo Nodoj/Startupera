@@ -42,6 +42,7 @@ export interface Database {
           title: string
           description: string | null
           category: string
+          categories: string[] | null
           complexity: string
           time_to_implement: string | null
           roi: string | null
@@ -52,12 +53,28 @@ export interface Database {
           author_id: string | null
           created_at: string
           updated_at: string
+          // Blog-style content fields
+          content: string | null
+          sections: any[] | null
+          use_cases: any[] | null
+          implementation_steps: any[] | null
+          benefits: any[] | null
+          prerequisites: string[] | null
+          faq: any[] | null
+          related_flows: string[] | null
+          reading_time: number | null
+          meta_description: string | null
+          meta_keywords: string[] | null
+          excerpt: string | null
+          table_of_contents: any[] | null
+          gallery: string[] | null
         }
         Insert: {
           id?: string
           title: string
           description?: string | null
           category: string
+          categories?: string[] | null
           complexity: string
           time_to_implement?: string | null
           roi?: string | null
@@ -68,12 +85,28 @@ export interface Database {
           author_id?: string | null
           created_at?: string
           updated_at?: string
+          // Blog-style content fields
+          content?: string | null
+          sections?: any[] | null
+          use_cases?: any[] | null
+          implementation_steps?: any[] | null
+          benefits?: any[] | null
+          prerequisites?: string[] | null
+          faq?: any[] | null
+          related_flows?: string[] | null
+          reading_time?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          excerpt?: string | null
+          table_of_contents?: any[] | null
+          gallery?: string[] | null
         }
         Update: {
           id?: string
           title?: string
           description?: string | null
           category?: string
+          categories?: string[] | null
           complexity?: string
           time_to_implement?: string | null
           roi?: string | null
@@ -84,6 +117,21 @@ export interface Database {
           author_id?: string | null
           created_at?: string
           updated_at?: string
+          // Blog-style content fields
+          content?: string | null
+          sections?: any[] | null
+          use_cases?: any[] | null
+          implementation_steps?: any[] | null
+          benefits?: any[] | null
+          prerequisites?: string[] | null
+          faq?: any[] | null
+          related_flows?: string[] | null
+          reading_time?: number | null
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          excerpt?: string | null
+          table_of_contents?: any[] | null
+          gallery?: string[] | null
         }
       }
       demo_bookings: {

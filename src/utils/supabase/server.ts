@@ -1,6 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
+// Client for use during request context (with cookies)
 export async function createClient(sessionPersistent: boolean = true) {
   const cookieStore = await cookies()
 
@@ -35,6 +37,20 @@ export async function createClient(sessionPersistent: boolean = true) {
           }
         },
       },
+    }
+  )
+}
+
+// Client for use during build time (no cookies, public data only)
+export function createBuildClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      }
     }
   )
 }
