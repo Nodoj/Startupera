@@ -1,19 +1,21 @@
 // Export all flow configurations from a single entry point
-export { getRagNodes } from './ragFlow';
-export { getYoutubeNodes } from './youtubeFlow';
-export { getImageNodes } from './imageFlow';
+import { getRagNodes } from './ragFlow';
+import { getYoutubeNodes } from './youtubeFlow';
+import { getImageNodes } from './imageFlow';
+
+export { getRagNodes, getYoutubeNodes, getImageNodes };
 export { getInitialEdges } from './edgeConfigs';
 
-// Flow configuration helper
+// Flow configuration helper with static imports
 export const getDiagramConfig = (type: string, isDark: boolean) => {
   switch (type) {
     case 'rag':
-      return require('./ragFlow').getRagNodes(isDark);
+      return getRagNodes(isDark);
     case 'youtube':
-      return require('./youtubeFlow').getYoutubeNodes(isDark);
+      return getYoutubeNodes(isDark);
     case 'image':
-      return require('./imageFlow').getImageNodes(isDark);
+      return getImageNodes(isDark);
     default:
-      return require('./ragFlow').getRagNodes(isDark);
+      return getRagNodes(isDark);
   }
 };

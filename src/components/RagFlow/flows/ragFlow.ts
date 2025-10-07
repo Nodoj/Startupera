@@ -21,7 +21,7 @@ export const getRagNodes = (isDark: boolean) => [
     data: { label: 'Document Upload', inputValue: '' },
     position: { x: 0, y: 200 },
     sourcePosition: Position.Right,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '2',
@@ -30,7 +30,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 280, y: 150 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '3',
@@ -39,7 +39,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 500, y: 150 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '4',
@@ -48,7 +48,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 720, y: 150 },
     sourcePosition: Position.Bottom,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   
   // Text Processing Pipeline (Second Row)
@@ -59,7 +59,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 940, y: 150 },
     sourcePosition: Position.Right,
     targetPosition: Position.Top,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '6',
@@ -68,7 +68,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 1160, y: 180 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '7',
@@ -77,7 +77,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 1160, y: 180 },
     sourcePosition: Position.Bottom,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   
   // Storage Layer (Third Row)
@@ -88,7 +88,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 720, y: 310 },
     sourcePosition: Position.Left,
     targetPosition: Position.Top,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '9',
@@ -97,7 +97,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 940, y: 310 },
     sourcePosition: Position.Left,
     targetPosition: Position.Right,
-    draggable: false,
+    draggable: true,
   },
   
   // Query Processing Pipeline (Bottom Left)
@@ -107,7 +107,7 @@ export const getRagNodes = (isDark: boolean) => [
     data: { label: 'User Query', inputValue: '' },
     position: { x: 0, y: 350 },
     sourcePosition: Position.Right,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '11',
@@ -116,7 +116,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 280, y: 400 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '12',
@@ -125,7 +125,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 500, y: 400 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   
   // Retrieval & Response Pipeline (Bottom Right)
@@ -136,7 +136,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 720, y: 400 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '14',
@@ -145,7 +145,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 940, y: 400 },
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '15',
@@ -154,7 +154,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 1160, y: 400 },
     sourcePosition: Position.Bottom,
     targetPosition: Position.Left,
-    draggable: false,
+    draggable: true,
   },
   
   // Final Processing
@@ -165,7 +165,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 500, y: 530 },
     sourcePosition: Position.Left,
     targetPosition: Position.Top,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '17',
@@ -174,7 +174,7 @@ export const getRagNodes = (isDark: boolean) => [
     position: { x: 720, y: 530 },
     sourcePosition: Position.Left,
     targetPosition: Position.Right,
-    draggable: false,
+    draggable: true,
   },
   {
     id: '18',
@@ -182,6 +182,6 @@ export const getRagNodes = (isDark: boolean) => [
     data: { label: 'Final Response' },
     position: { x: 1020, y: 530 },
     targetPosition: Position.Right,
-    draggable: false,
+    draggable: true,
   },
 ];

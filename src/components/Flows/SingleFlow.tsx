@@ -14,41 +14,31 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
   if (viewMode === 'list') {
     return (
       <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 mb-6 border border-stroke/10 dark:border-stroke-dark/10 z-0">
-        <div className="p-6 md:p-8">
-          {/* Header Section */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              {/* Category Tag */}
-              <div className="mb-3">
-                <span className="inline-flex items-center rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-sm font-semibold text-primary capitalize">
-                  {tags[0]}
-                </span>
+        <div className="flex flex-col md:flex-row">
+          {/* Featured Image */}
+          {flow.image && (
+            <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 p-4 md:p-0 md:pl-4 md:pt-4 md:pb-4">
+              <div className="relative w-full h-full rounded-lg overflow-hidden border border-stroke/20 dark:border-stroke-dark/20">
+                <Image
+                  src={flow.image}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                />
               </div>
-              
-              {/* Title */}
-              <h3 className="mb-3">
-                <Link
-                  href={`/flows/${flow.id}`}
-                  className="hover:text-primary dark:hover:text-primary block text-xl font-bold text-black lg:text-2xl dark:text-white line-clamp-2 group-hover:text-primary transition-colors"
-                >
-                  {title}
-                </Link>
-              </h3>
             </div>
-            
-            {/* Action Button */}
-            <Link
-              href={`/flows/${flow.id}`}
-              className="ml-4 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 group-hover:bg-primary group-hover:text-white"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          )}
           
-          {/* Description */}
-          <p className="text-body-color mb-6 text-base font-medium line-clamp-3 leading-relaxed">
-            {paragraph}
-          </p>
+          <div className="p-6 md:p-8 flex-1 flex flex-col">
+            {/* Title */}
+            <h3 className="mb-4">
+              <Link
+                href={`/flows/${flow.id}`}
+                className="hover:text-primary dark:hover:text-primary block text-xl font-bold text-black lg:text-2xl dark:text-white line-clamp-2 group-hover:text-primary transition-colors"
+              >
+                {title}
+              </Link>
+            </h3>
           
           {/* Flow Metrics */}
           <div className="mb-6 flex flex-wrap gap-3">
@@ -67,7 +57,7 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
           </div>
           
           {/* Author and Date */}
-          <div className="flex items-center justify-between pt-4 border-t border-stroke/20 dark:border-stroke-dark/20">
+          <div className="flex items-center justify-between pt-4 border-t border-stroke/20 dark:border-stroke-dark/20 mt-auto">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 text-body-color dark:text-body-color-dark">
                 <User className="h-4 w-4" />
@@ -79,6 +69,16 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
                 <span className="text-sm">{publishDate}</span>
               </div>
             </div>
+            
+            {/* Read More Button */}
+            <Link
+              href={`/flows/${flow.id}`}
+              className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm transition-colors group/link"
+            >
+              <span>Read Full</span>
+              <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+            </Link>
+          </div>
           </div>
         </div>
       </div>
@@ -87,44 +87,31 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
 
   // Grid view (default)
   return (
-    <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 border border-stroke/10 dark:border-stroke-dark/10 h-full z-0">
-      <div className="p-6 sm:p-8 md:px-6 md:py-8 lg:p-8 xl:px-5 xl:py-8 2xl:p-8 flex flex-col h-full">
-        {/* Header Section */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            {/* Category Tag */}
-            <div className="mb-4">
-              <span className="inline-flex items-center rounded-full bg-primary/10 border border-primary/20 px-3 py-1.5 text-sm font-semibold text-primary capitalize">
-                {tags[0]}
-              </span>
-            </div>
-            
-            {/* Title */}
-            <h3>
-              <Link
-                href={`/flows/${flow.id}`}
-                className="hover:text-primary dark:hover:text-primary mb-4 block text-xl font-bold text-black sm:text-2xl dark:text-white group-hover:text-primary transition-colors line-clamp-2"
-              >
-                {title}
-              </Link>
-            </h3>
+    <div className="group shadow-one hover:shadow-two dark:bg-dark dark:hover:shadow-gray-dark relative overflow-hidden rounded-xl bg-white duration-300 border border-stroke/10 dark:border-stroke-dark/10 h-full z-0 flex flex-col">
+      {/* Featured Image */}
+      {flow.image && (
+        <div className="p-4 pb-0">
+          <div className="relative w-full h-48 rounded-lg overflow-hidden border border-stroke/20 dark:border-stroke-dark/20">
+            <Image
+              src={flow.image}
+              alt={title}
+              fill
+              className="object-cover"
+            />
           </div>
-          
-          {/* Action Button */}
+        </div>
+      )}
+      
+      <div className="p-6 sm:p-8 md:px-6 md:py-8 lg:p-8 xl:px-5 xl:py-8 2xl:p-8 flex flex-col flex-1">
+        {/* Title */}
+        <h3 className="mb-4">
           <Link
             href={`/flows/${flow.id}`}
-            className="ml-3 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 group-hover:bg-primary group-hover:text-white flex-shrink-0"
+            className="hover:text-primary dark:hover:text-primary block text-xl font-bold text-black sm:text-2xl dark:text-white group-hover:text-primary transition-colors line-clamp-2"
           >
-            <ArrowRight className="h-4 w-4" />
+            {title}
           </Link>
-        </div>
-        
-        {/* Description */}
-        <div className="flex-1">
-          <p className="text-body-color mb-6 text-base font-medium line-clamp-4 leading-relaxed">
-            {paragraph}
-          </p>
-        </div>
+        </h3>
         
         {/* Flow Metrics */}
         <div className="mb-6 flex flex-wrap gap-2">
@@ -155,6 +142,15 @@ const SingleFlow = ({ flow, viewMode = 'grid' }: SingleFlowProps) => {
               <span className="text-sm">{publishDate}</span>
             </div>
           </div>
+          
+          {/* Read More Button */}
+          <Link
+            href={`/flows/${flow.id}`}
+            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm transition-colors group/link"
+          >
+            <span>View Details</span>
+            <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </div>
     </div>

@@ -31,27 +31,33 @@
   }
 }
 
-/* Node Styles */
+/* Node Styles - Optimized for smooth dragging */
 .react-flow__node {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: grab;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .react-flow__node:hover {
-  transform: scale(1.05) translateZ(0);
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+  transform: scale(1.03) translateZ(0);
   z-index: 1000;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .react-flow__node.dragging {
-  transform: scale(1.1) translateZ(0);
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2));
+  transform: scale(1.05) translateZ(0);
   cursor: grabbing;
   z-index: 1001;
+  transition: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .react-flow__node.selected {
-  animation: pulse-glow 2s ease-in-out infinite;
+  box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.6);
+  transform: scale(1.02);
 }
 
 /* Edge Styles */
@@ -153,36 +159,13 @@
   filter: drop-shadow(0 15px 30px rgba(255, 255, 255, 0.15));
 }
 
-/* Custom node type styles */
+/* Custom node type styles - Removed infinite animations for performance */
 .react-flow__node-input {
-  animation: pulse-glow 3s ease-in-out infinite;
+  /* Removed infinite animation */
 }
 
 .react-flow__node-output {
-  animation: pulse-glow 3s ease-in-out infinite reverse;
-}
-
-/* Canvas interaction states */
-.react-flow.pointer-events-none {
-  pointer-events: none;
-}
-
-.react-flow.pointer-events-none .react-flow__pane {
-  pointer-events: none;
-}
-
-/* Ensure scroll events pass through when canvas is inactive */
-.react-flow.pointer-events-none * {
-  pointer-events: none !important;
-}
-
-/* Allow panel interactions even when canvas is inactive */
-.react-flow.pointer-events-none .react-flow__panel {
-  pointer-events: auto;
-}
-
-.react-flow.pointer-events-none .react-flow__panel * {
-  pointer-events: auto !important;
+  /* Removed infinite animation */
 }
 
 /* Cursor states for canvas interaction */
@@ -194,9 +177,19 @@
   cursor: grabbing;
 }
 
-/* Override cursor when canvas is inactive */
-.react-flow.pointer-events-none .react-flow__pane {
-  cursor: grab;
+/* Ensure Panel buttons are clickable */
+.react-flow__panel {
+  pointer-events: auto !important;
+  z-index: 10;
+}
+
+.react-flow__panel button {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+.react-flow__panel * {
+  pointer-events: auto !important;
 }
 
 /* Responsive adjustments */

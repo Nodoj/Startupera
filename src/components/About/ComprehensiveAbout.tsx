@@ -1,5 +1,5 @@
 import SectionTitle from "../Common/SectionTitle";
-import AnimatedCubes from "../AnimatedCubes";
+import AnimatedOrbs from "../AnimatedOrbs";
 import Brands from "../Brands";
 import Button from "../Common/Button";
 import { 
@@ -95,9 +95,7 @@ const ComprehensiveAbout = () => {
 
             <div className="w-full px-4 lg:w-1/2">
               <div className="relative flex items-center justify-center min-h-[400px]">
-                <div className="transform translate-y-[-100px]">
-                  <AnimatedCubes />
-                </div>
+                <AnimatedOrbs />
               </div>
             </div>
           </div>

@@ -231,7 +231,7 @@ const Header = () => {
                       {isAdmin && (
                         <Link
                           href="/admin"
-                          className="hidden md:flex items-center gap-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 px-4 py-2 text-sm font-medium text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
+                          className="hidden md:flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/30 dark:hover:bg-primary/30 transition-colors"
                         >
                           <LayoutDashboard className="h-4 w-4" />
                           <span>Dashboard</span>

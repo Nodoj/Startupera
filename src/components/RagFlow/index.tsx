@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useEffect, useState } from 'react';
+import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import {
@@ -30,8 +30,8 @@ import {
 } from "lucide-react";
 import { getDiagramConfig, getInitialEdges } from './flows';
 
-// Custom Interactive Node Components
-const InputNode = ({ data, selected }: any) => {
+// Custom Interactive Node Components - Memoized for performance
+const InputNode = React.memo(({ data, selected }: any) => {
   const [inputValue, setInputValue] = useState(data.inputValue || '');
   
   return (
@@ -50,9 +50,10 @@ const InputNode = ({ data, selected }: any) => {
       <Handle type="source" position={Position.Right} className="w-3 h-3 bg-white" />
     </div>
   );
-};
+});
+InputNode.displayName = 'InputNode';
 
-const ProcessNode = ({ data, selected }: any) => {
+const ProcessNode = React.memo(({ data, selected }: any) => {
   const IconComponent = data.icon;
   return (
     <div className="px-4 py-3 shadow-lg rounded-lg border-2 border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 min-w-[160px]">
@@ -66,9 +67,10 @@ const ProcessNode = ({ data, selected }: any) => {
       <Handle type="source" position={Position.Right} className="w-3 h-3 bg-gray-400" />
     </div>
   );
-};
+});
+ProcessNode.displayName = 'ProcessNode';
 
-const OutputNode = ({ data, selected }: any) => {
+const OutputNode = React.memo(({ data, selected }: any) => {
   const [output, setOutput] = useState('AI Response will appear here...');
   
   // Check if this is the Image Generation flow
@@ -123,7 +125,8 @@ const OutputNode = ({ data, selected }: any) => {
       />
     </div>
   );
-};
+});
+OutputNode.displayName = 'OutputNode';
 
 // Custom node styles with theme support
 const getNodeStyles = (isDark: boolean) => ({
@@ -177,10 +180,9 @@ const RagFlow = () => {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentDiagram, setCurrentDiagram] = useState('rag');
-  const [isCanvasActive, setIsCanvasActive] = useState(false);
   const isDark = resolvedTheme === 'dark';
 
-  // Node types
+  // Node types - memoized once
   const nodeTypes = useMemo(() => ({
     inputNode: InputNode,
     processNode: ProcessNode,
@@ -194,70 +196,29 @@ const RagFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes as any);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  // Update nodes and edges when theme changes
+  // Update nodes and edges when theme or diagram changes - optimized
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
-      const newNodes = getDiagramConfig(currentDiagram, isDark);
-      const newEdges = getInitialEdges(isDark);
-      
-      setNodes(newNodes as any);
-      setEdges(newEdges);
-    }
+    if (!mounted) return;
+    
+    const newNodes = getDiagramConfig(currentDiagram, isDark);
+    const newEdges = getInitialEdges(isDark);
+    
+    // Always update when diagram type changes
+    setNodes(newNodes as any);
+    setEdges(newEdges);
   }, [currentDiagram, isDark, mounted, setNodes, setEdges]);
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    (params: Connection) => setEdges((prevEdges) => addEdge(params, prevEdges)),
     [setEdges],
   );
 
-  // Handle node selection for highlighting
-  const onNodeClick = useCallback((event: React.MouseEvent, node: any) => {
-    console.log('Node clicked:', node.data.label);
-    // Add visual feedback for node interaction
-    setNodes((nds) =>
-      nds.map((n) => ({
-        ...n,
-        selected: n.id === node.id,
-      }))
-    );
-  }, [setNodes]);
-
-  // Handle edge selection
-  const onEdgeClick = useCallback((event: React.MouseEvent, edge: any) => {
-    console.log('Edge clicked:', edge.id);
-    // Add visual feedback for edge interaction
-    setEdges((eds) =>
-      eds.map((e) => ({
-        ...e,
-        selected: e.id === edge.id,
-      }))
-    );
-  }, [setEdges]);
-
-  // Handle canvas interaction states
-  const handleCanvasClick = useCallback(() => {
-    setIsCanvasActive(true);
-  }, []);
-
-  const handleCanvasBlur = useCallback(() => {
-    setIsCanvasActive(false);
-  }, []);
-
-  const handleCanvasMouseLeave = useCallback(() => {
-    setIsCanvasActive(false);
-  }, []);
-
-  // Handle mouse enter to show interaction hint
-  const handleCanvasMouseEnter = useCallback(() => {
-    // Just for visual feedback, don't activate yet
-  }, []);
-
-  // Get diagram title based on current type
-  const getDiagramTitle = () => {
+  // Memoized diagram metadata
+  const diagramTitle = useMemo(() => {
     switch (currentDiagram) {
       case 'rag':
         return 'RAG AI Chatbots';
@@ -268,9 +229,9 @@ const RagFlow = () => {
       default:
         return 'AI Automation Architecture';
     }
-  };
+  }, [currentDiagram]);
 
-  const getDiagramDescription = () => {
+  const diagramDescription = useMemo(() => {
     switch (currentDiagram) {
       case 'rag':
         return 'Discover how our Retrieval-Augmented Generation system processes your documents and delivers intelligent, context-aware responses through advanced AI technology.';
@@ -281,7 +242,7 @@ const RagFlow = () => {
       default:
         return 'Interactive visualization of AI automation workflows and architectures.';
     }
-  };
+  }, [currentDiagram]);
 
   const proOptions = { hideAttribution: true };
 
@@ -301,18 +262,7 @@ const RagFlow = () => {
 
         <div className="relative">
           {/* Flow Container */}
-          <div 
-            className={`w-full h-[600px] bg-white dark:bg-gray-dark rounded-xl border shadow-lg overflow-hidden transition-all duration-200 ${
-              isCanvasActive 
-                ? 'border-primary ring-2 ring-primary/20 cursor-grab' 
-                : 'border-stroke dark:border-stroke-dark cursor-grab hover:cursor-grab'
-            }`}
-            onClick={handleCanvasClick}
-            onMouseEnter={handleCanvasMouseEnter}
-            onMouseLeave={handleCanvasMouseLeave}
-            tabIndex={0}
-            onBlur={handleCanvasBlur}
-          >
+          <div className="w-full h-[600px] bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-lg overflow-hidden">
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -320,8 +270,6 @@ const RagFlow = () => {
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
-              onNodeClick={onNodeClick}
-              onEdgeClick={onEdgeClick}
               proOptions={proOptions}
               fitView
               fitViewOptions={{
@@ -330,14 +278,19 @@ const RagFlow = () => {
               }}
               minZoom={0.3}
               maxZoom={2}
-              defaultViewport={{ x: 0, y: 0, zoom: 0.4 }}
+              defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
               nodesDraggable={true}
               nodesConnectable={true}
               elementsSelectable={true}
-              panOnDrag={isCanvasActive}
-              zoomOnScroll={isCanvasActive}
+              panOnDrag={true}
+              panOnScroll={false}
+              zoomOnScroll={true}
               zoomOnPinch={true}
-              className={`bg-transparent ${!isCanvasActive ? 'pointer-events-none' : ''}`}
+              zoomOnDoubleClick={false}
+              preventScrolling={false}
+              nodeOrigin={[0.5, 0.5]}
+              selectNodesOnDrag={false}
+              className="bg-transparent"
             >
               {/* Diagram Switcher */}
               <Panel position="top-center">
