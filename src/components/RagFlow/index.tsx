@@ -180,6 +180,7 @@ const RagFlow = () => {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentDiagram, setCurrentDiagram] = useState('rag');
+  const [isMobile, setIsMobile] = useState(false);
   const isDark = resolvedTheme === 'dark';
 
   // Node types - memoized once
@@ -211,6 +212,17 @@ const RagFlow = () => {
     setNodes(newNodes as any);
     setEdges(newEdges);
   }, [currentDiagram, isDark, mounted, setNodes, setEdges]);
+
+  // Detect if mobile/tablet
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((prevEdges) => addEdge(params, prevEdges)),
@@ -257,12 +269,12 @@ const RagFlow = () => {
           title="Explore Our AI Solutions"
           paragraph="Interactive visualizations of our custom AI automation workflows. Click and explore how we build intelligent systems that transform your business processes with local deployment and enterprise security."
           center
-          mb="50px"
+          mb="44px"
         />
 
         <div className="relative">
           {/* Flow Container */}
-          <div className="w-full h-[600px] bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-lg overflow-hidden">
+          <div className="w-full h-[400px] sm:h-[500px] lg:h-[600px] bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-lg overflow-hidden">
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -273,74 +285,80 @@ const RagFlow = () => {
               proOptions={proOptions}
               fitView
               fitViewOptions={{
-                padding: 0.3,
+                padding: isMobile ? 0.1 : 0.3,
                 includeHiddenNodes: false,
               }}
-              minZoom={0.3}
-              maxZoom={2}
-              defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-              nodesDraggable={true}
-              nodesConnectable={true}
-              elementsSelectable={true}
-              panOnDrag={true}
+              minZoom={isMobile ? 0.2 : 0.3}
+              maxZoom={isMobile ? 1 : 2}
+              defaultViewport={{ x: 0, y: 0, zoom: isMobile ? 0.4 : 0.8 }}
+              nodesDraggable={!isMobile}
+              nodesConnectable={false}
+              elementsSelectable={!isMobile}
+              panOnDrag={!isMobile}
               panOnScroll={false}
-              zoomOnScroll={true}
-              zoomOnPinch={true}
+              zoomOnScroll={!isMobile}
+              zoomOnPinch={!isMobile}
               zoomOnDoubleClick={false}
-              preventScrolling={false}
+              preventScrolling={true}
               nodeOrigin={[0.5, 0.5]}
               selectNodesOnDrag={false}
               className="bg-transparent"
             >
               {/* Diagram Switcher */}
-              <Panel position="top-center">
-                <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-stroke dark:border-stroke-dark">
-                  <div className="flex gap-2">
+              <Panel position="top-center" className="!pointer-events-auto">
+                <div className="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-lg shadow-lg border border-stroke dark:border-stroke-dark">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
                     <button
                       onClick={() => setCurrentDiagram('rag')}
-                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-colors ${
+                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded text-[10px] sm:text-xs font-medium transition-colors ${
                         currentDiagram === 'rag'
                           ? 'bg-blue-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
-                      <Bot className="h-3 w-3" />
-                      RAG Chatbot
+                      <Bot className="h-3 w-3 sm:h-3 sm:w-3" />
+                      <span className="hidden xs:inline sm:inline">RAG Chatbot</span>
+                      <span className="xs:hidden sm:hidden">RAG</span>
                     </button>
                     <button
                       onClick={() => setCurrentDiagram('youtube')}
-                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-colors ${
+                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded text-[10px] sm:text-xs font-medium transition-colors ${
                         currentDiagram === 'youtube'
                           ? 'bg-red-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
-                      <Youtube className="h-3 w-3" />
-                      YouTube Automation
+                      <Youtube className="h-3 w-3 sm:h-3 sm:w-3" />
+                      <span className="hidden xs:inline sm:inline">YouTube</span>
+                      <span className="xs:hidden sm:hidden">YT</span>
                     </button>
                     <button
                       onClick={() => setCurrentDiagram('image')}
-                      className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-medium transition-colors ${
+                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded text-[10px] sm:text-xs font-medium transition-colors ${
                         currentDiagram === 'image'
                           ? 'bg-purple-500 text-white'
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
-                      <Zap className="h-3 w-3" />
-                      Image Generation
+                      <Zap className="h-3 w-3 sm:h-3 sm:w-3" />
+                      <span className="hidden xs:inline sm:inline">Image Gen</span>
+                      <span className="xs:hidden sm:hidden">IMG</span>
                     </button>
                   </div>
                 </div>
               </Panel>
-              <Controls 
-                className="bg-white dark:bg-gray-800 border border-stroke dark:border-gray-600 rounded-lg shadow-lg"
-                showZoom={true}
-                showFitView={true}
-                showInteractive={true}
-              />
+              {/* Controls - Hidden on mobile */}
+              {!isMobile && (
+                <Controls 
+                  className="bg-white dark:bg-gray-800 border border-stroke dark:border-gray-600 rounded-lg shadow-lg"
+                  showZoom={true}
+                  showFitView={true}
+                  showInteractive={true}
+                />
+              )}
               <Background 
                 variant={BackgroundVariant.Dots} 
-                gap={20} 
+                gap={isMobile ? 15 : 20} 
                 size={1} 
                 color={isDark ? "#374151" : "#e2e8f0"}
               />
@@ -349,33 +367,34 @@ const RagFlow = () => {
 
 
           {/* Dynamic Legend */}
-          <div className="mt-8 flex flex-wrap justify-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-500 rounded"></div>
-              <span className="text-sm text-body-color dark:text-body-color-dark">Input Nodes</span>
+          <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-3 sm:gap-6 px-4">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded flex-shrink-0"></div>
+              <span className="text-xs sm:text-sm text-body-color dark:text-body-color-dark">Input</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-gray-400 rounded"></div>
-              <span className="text-sm text-body-color dark:text-body-color-dark">Processing Steps</span>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-400 rounded flex-shrink-0"></div>
+              <span className="text-xs sm:text-sm text-body-color dark:text-body-color-dark">Processing</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-green-500 rounded"></div>
-              <span className="text-sm text-body-color dark:text-body-color-dark">Output Results</span>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded flex-shrink-0"></div>
+              <span className="text-xs sm:text-sm text-body-color dark:text-body-color-dark">Output</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-transparent border-2 border-blue-500 rounded"></div>
-              <span className="text-sm text-body-color dark:text-body-color-dark">Animated Flow</span>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-transparent border-2 border-blue-500 rounded flex-shrink-0"></div>
+              <span className="text-xs sm:text-sm text-body-color dark:text-body-color-dark">Flow</span>
             </div>
           </div>
 
           {/* Explore More Button */}
-          <div className="mt-12 text-center">
+          <div className="mt-8 sm:mt-12 text-center px-4">
             <Link
               href="/flows"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors duration-200 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 bg-primary text-white text-sm sm:text-base font-semibold rounded-lg hover:bg-primary/90 transition-colors duration-200 shadow-lg hover:shadow-xl"
             >
-              <span>Explore More Automation Flows</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="hidden sm:inline">Explore More Automation Flows</span>
+              <span className="sm:hidden">Explore Flows</span>
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>

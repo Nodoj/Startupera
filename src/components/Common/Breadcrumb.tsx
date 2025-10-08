@@ -9,26 +9,39 @@ const Breadcrumb = ({
 }) => {
   return (
     <>
-      <section className="relative z-10 overflow-hidden pt-28 lg:pt-[150px]">
+      <section className="relative z-10 overflow-hidden pt-20 pb-4 sm:pt-24 sm:pb-6 lg:pt-32 lg:pb-8">
         <div className="container">
-          <div className="flex justify-start">
-            <div className="rounded-lg bg-white/80 backdrop-blur-sm px-6 py-3 shadow-lg dark:bg-gray-dark/80">
-              <ul className="flex items-center">
+          {/* Breadcrumb Navigation */}
+          <div className={description ? "mb-8 sm:mb-10" : "mb-0"}>
+            <div className="inline-flex rounded-lg bg-white/80 backdrop-blur-sm px-4 py-2 sm:px-6 sm:py-3 shadow-lg dark:bg-gray-dark/80 border border-stroke/10 dark:border-stroke-dark/10">
+              <ul className="flex items-center gap-2">
                 <li className="flex items-center">
                   <Link
                     href="/"
-                    className="pr-1 text-base font-medium text-body-color hover:text-primary transition-colors duration-300"
+                    className="text-sm sm:text-base font-medium text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary transition-colors duration-300"
                   >
                     Home
                   </Link>
-                  <span className="mr-3 block h-2 w-2 rotate-45 border-r-2 border-t-2 border-body-color"></span>
+                  <span className="mx-2 sm:mx-3 block h-2 w-2 rotate-45 border-r-2 border-t-2 border-body-color dark:border-body-color-dark"></span>
                 </li>
-                <li className="text-base font-medium text-primary">
+                <li className="text-sm sm:text-base font-medium text-primary dark:text-primary truncate max-w-[150px] sm:max-w-none">
                   {pageName}
                 </li>
               </ul>
             </div>
           </div>
+
+          {/* Page Title and Description */}
+          {description && (
+            <div className="max-w-3xl">
+              <h1 className="mb-4 text-2xl font-bold text-black dark:text-white sm:text-3xl lg:text-4xl">
+                {pageName}
+              </h1>
+              <p className="text-base text-body-color dark:text-body-color-dark sm:text-lg">
+                {description}
+              </p>
+            </div>
+          )}
         </div>
 
         <div>

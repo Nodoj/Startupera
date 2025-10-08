@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Breadcrumb from "@/components/Common/Breadcrumb";
 import DemoBooking from "@/components/DemoBooking";
 
 export const metadata: Metadata = {
@@ -11,10 +10,6 @@ export const metadata: Metadata = {
 export default function BookDemoPage() {
   return (
     <>
-      <Breadcrumb
-        pageName="Book a Demo"
-        description="Schedule a personalized demonstration of our AI automation solutions and discover how we can transform your business operations."
-      />
       <DemoBooking />
     </>
   );

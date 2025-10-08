@@ -56,14 +56,93 @@ const FlowDetailsBlog = ({
   const showFeaturedImage = !hasGallery && flow.featured_image;
   
   return (
-    <section className="pb-[120px] pt-[120px]">
+    <section className="pb-16 pt-20 sm:pb-20 sm:pt-24 lg:pb-28 lg:pt-32">
+      {/* Custom styles for flow content */}
+      <style jsx global>{`
+        .flow-content h1 {
+          font-size: 2.25rem;
+          font-weight: 700;
+          margin-bottom: 1rem;
+          margin-top: 1.5rem;
+          line-height: 1.2;
+          color: inherit;
+        }
+        .flow-content h2 {
+          font-size: 1.875rem;
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+          margin-top: 1.25rem;
+          line-height: 1.3;
+          color: inherit;
+        }
+        .flow-content h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          margin-top: 1rem;
+          line-height: 1.4;
+          color: inherit;
+        }
+        .flow-content ul,
+        .flow-content ol {
+          margin-top: 0.75rem;
+          margin-bottom: 0.75rem;
+          padding-left: 1.5rem;
+        }
+        .flow-content li {
+          margin-bottom: 0.25rem;
+        }
+        .flow-content blockquote {
+          border-left: 4px solid #4A6CF7;
+          padding-left: 1rem;
+          font-style: italic;
+          margin: 1rem 0;
+        }
+        .flow-content code {
+          background-color: rgba(74, 108, 247, 0.1);
+          color: #4A6CF7;
+          padding: 0.125rem 0.25rem;
+          border-radius: 0.25rem;
+          font-size: 0.875rem;
+        }
+        .flow-content pre {
+          background-color: #1a1a1a;
+          color: #fff;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          overflow-x: auto;
+          margin: 1rem 0;
+        }
+        .flow-content pre code {
+          background-color: transparent;
+          color: inherit;
+          padding: 0;
+        }
+        .flow-content img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 0.5rem;
+          margin: 1rem 0;
+        }
+        .flow-content a {
+          color: #4A6CF7;
+          text-decoration: underline;
+        }
+        .flow-content a:hover {
+          opacity: 0.8;
+        }
+        .flow-content p {
+          margin-bottom: 1rem;
+          line-height: 1.75;
+        }
+      `}</style>
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           {/* Main Content - Left Side */}
           <div className="w-full px-4 lg:w-8/12 xl:w-9/12">
             
             {/* Hero Header - Matching Global Style */}
-            <div className="mb-10">
+            <div className="mb-8 sm:mb-10">
               {/* Category Badges */}
               <div className="mb-4 flex flex-wrap gap-2">
                 <span className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white">
@@ -182,18 +261,7 @@ const FlowDetailsBlog = ({
             {(flow.content || flow.description) && (
               <div id="overview" className="shadow-one dark:bg-dark rounded-xl bg-white p-8 sm:p-11 mb-10">
                 <div 
-                  className="prose prose-lg dark:prose-invert max-w-none
-                    prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white
-                    prose-p:text-body-color dark:prose-p:text-body-color-dark prose-p:leading-relaxed
-                    prose-a:text-primary hover:prose-a:text-primary/80
-                    prose-strong:text-black dark:prose-strong:text-white
-                    prose-ul:text-body-color dark:prose-ul:text-body-color-dark
-                    prose-ol:text-body-color dark:prose-ol:text-body-color-dark
-                    prose-li:marker:text-primary
-                    prose-blockquote:border-l-primary prose-blockquote:text-body-color dark:prose-blockquote:text-body-color-dark
-                    prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                    prose-pre:bg-gray-900 dark:prose-pre:bg-black
-                    prose-img:rounded-lg"
+                  className="flow-content prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white prose-p:text-body-color dark:prose-p:text-body-color-dark prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-black dark:prose-strong:text-white prose-ul:text-body-color dark:prose-ul:text-body-color-dark prose-ol:text-body-color dark:prose-ol:text-body-color-dark prose-li:marker:text-primary prose-blockquote:border-l-primary prose-blockquote:text-body-color dark:prose-blockquote:text-body-color-dark prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-900 dark:prose-pre:bg-black prose-img:rounded-lg"
                   dangerouslySetInnerHTML={{ __html: flow.content || flow.description || '' }}
                 />
               </div>
@@ -206,7 +274,7 @@ const FlowDetailsBlog = ({
                   {section.title}
                 </h2>
                 <div 
-                  className="prose prose-lg dark:prose-invert max-w-none"
+                  className="flow-content prose prose-lg dark:prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ __html: section.content }}
                 />
               </div>

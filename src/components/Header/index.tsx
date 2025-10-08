@@ -7,8 +7,9 @@ import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import Button from "@/components/Common/Button";
 import ProfileDropdown from "./ProfileDropdown";
+import MobileMenu from "./MobileMenu";
 import { useUser } from "@/hooks/useUser";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, LogIn, UserPlus } from "lucide-react";
 
 const Header = () => {
   const { user, loading } = useUser();
@@ -57,11 +58,11 @@ const Header = () => {
         <div className="container">
           <div className="relative -mx-4 flex items-center justify-between">
             {/* Logo - Left */}
-            <div className="flex-shrink-0 px-4">
+            <div className="flex-shrink-0 px-3 sm:px-4 w-auto">
               <Link
                 href="/"
                 className={`header-logo block ${
-                  sticky ? "py-5 lg:py-2" : "py-8"
+                  sticky ? "py-3 sm:py-5 lg:py-2" : "py-5 sm:py-8"
                 } `}
               >
                 <Image
@@ -69,27 +70,23 @@ const Header = () => {
                   alt="logo"
                   width={140}
                   height={30}
-                  className="w-full dark:hidden"
+                  className="w-[140px] sm:w-[140px] lg:w-full dark:hidden"
                 />
                 <Image
                   src="/images/logo/logo.svg"
                   alt="logo"
                   width={140}
                   height={30}
-                  className="hidden w-full dark:block"
+                  className="hidden w-[140px] sm:w-[140px] lg:w-full dark:block"
                 />
               </Link>
             </div>
 
             {/* Navigation Menu - Center */}
-            <div className="flex-1 flex justify-center px-4">
+            <div className="hidden lg:flex flex-1 justify-center px-4">
               <nav
                 id="navbarCollapse"
-                className={`navbar border-body-color/50 dark:border-body-color/20 dark:bg-dark absolute right-0 z-30 w-[250px] rounded border-[.5px] bg-white px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${
-                  navbarOpen
-                    ? "visibility top-full opacity-100"
-                    : "invisible top-[120%] opacity-0"
-                }`}
+                className="navbar lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100"
               >
                 <ul className="block lg:flex lg:space-x-8">
                   {menuData.map((menuItem, index) => (
@@ -197,32 +194,32 @@ const Header = () => {
               </nav>
             </div>
 
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={navbarToggleHandler}
-              id="navbarToggler"
-              aria-label="Mobile Menu"
-              className="ring-primary absolute top-1/2 right-4 block translate-y-[-50%] rounded-lg px-3 py-[6px] focus:ring-2 lg:hidden"
-            >
-              <span
-                className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${
-                  navbarOpen ? "top-[7px] rotate-45" : " "
-                }`}
-              />
-              <span
-                className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${
-                  navbarOpen ? "opacity-0" : " "
-                }`}
-              />
-              <span
-                className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${
-                  navbarOpen ? "top-[-8px] -rotate-45" : " "
-                }`}
-              />
-            </button>
-
             {/* Auth & Theme - Right */}
-            <div className="flex items-center gap-3 px-4">
+            <div className="flex items-center gap-1 px-2 sm:gap-2 sm:px-4 lg:gap-3">
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={navbarToggleHandler}
+                id="navbarToggler"
+                aria-label="Mobile Menu"
+                className="ring-primary block rounded-lg p-1.5 sm:p-2 focus:ring-2 lg:hidden"
+              >
+                <span
+                  className={`relative my-1 block h-0.5 w-[24px] bg-black transition-all duration-300 dark:bg-white ${
+                    navbarOpen ? "top-[6px] rotate-45" : " "
+                  }`}
+                />
+                <span
+                  className={`relative my-1 block h-0.5 w-[24px] bg-black transition-all duration-300 dark:bg-white ${
+                    navbarOpen ? "opacity-0" : " "
+                  }`}
+                />
+                <span
+                  className={`relative my-1 block h-0.5 w-[24px] bg-black transition-all duration-300 dark:bg-white ${
+                    navbarOpen ? "top-[-6px] -rotate-45" : " "
+                  }`}
+                />
+              </button>
+              
               {!loading && (
                 <>
                   {user ? (
@@ -243,21 +240,25 @@ const Header = () => {
                     </>
                   ) : (
                     <>
-                      {/* Sign In / Sign Up for guests */}
+                      {/* Auth buttons for guests - Desktop only */}
                       <Link
                         href="/signin"
-                        className="text-dark hidden px-4 py-2 text-base font-medium hover:opacity-70 md:block dark:text-white"
+                        className="hidden lg:flex items-center gap-2 px-4 py-2 text-base font-medium text-dark hover:text-primary dark:text-white dark:hover:text-primary transition-colors"
                       >
+                        <LogIn className="h-4 w-4" />
                         Sign In
                       </Link>
-                      <Button
-                        href="/signup"
-                        variant="primary"
-                        size="sm"
-                        className="hidden md:inline-flex"
-                      >
-                        Sign Up
-                      </Button>
+                      <div className="hidden lg:block">
+                        <Button
+                          href="/signup"
+                          variant="primary"
+                          size="sm"
+                          className="items-center gap-2"
+                        >
+                          <UserPlus className="h-4 w-4" />
+                          Sign Up
+                        </Button>
+                      </div>
                     </>
                   )}
                 </>
@@ -268,6 +269,18 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Component */}
+      <MobileMenu
+        menuData={menuData}
+        isOpen={navbarOpen}
+        onClose={() => setNavbarOpen(false)}
+        user={user}
+        isAdmin={isAdmin}
+        loading={loading}
+        openIndex={openIndex}
+        onSubmenuToggle={handleSubmenu}
+      />
     </>
   );
 };

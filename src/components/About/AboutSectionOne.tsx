@@ -9,8 +9,8 @@ const checkIcon = (
 
 const AboutSectionOne = () => {
   const List = ({ text }) => (
-    <p className="text-body-color mb-5 flex items-center text-lg font-medium">
-      <span className="bg-primary/10 text-primary mr-4 flex h-[30px] w-[30px] items-center justify-center rounded-md">
+    <p className="text-body-color mb-4 flex items-center text-base sm:text-lg font-medium">
+      <span className="bg-primary/10 text-primary mr-3 flex h-[28px] w-[28px] sm:h-[30px] sm:w-[30px] items-center justify-center rounded-md flex-shrink-0">
         {checkIcon}
       </span>
       {text}
@@ -18,18 +18,18 @@ const AboutSectionOne = () => {
   );
 
   return (
-    <section id="about" className="h-screen flex items-center justify-center">
+    <section id="about" className="py-16 md:py-20 lg:h-screen lg:flex lg:items-center lg:justify-center">
       <div className="container">
         <div className="-mx-4 flex flex-wrap items-center">
           <div className="w-full px-4 lg:w-1/2">
             <SectionTitle
               title="Custom AI Built for You"
               paragraph="At Toraflow, we believe AI should feel like a natural part of your workflow. That's why we build custom AI solutions designed to run securely in your own environment, giving you full control over your data. We put privacy first, always. Your information stays safe, your business stays protected, and your automations scale as you grow. Whether it's custom models, enterprise grade security, or round-the-clock support, we're here to make sure your AI works the way you need it to—no compromises."
-              mb="44px"
+              mb="32px"
             />
 
             <div
-              className="mb-12 max-w-[570px] lg:mb-0"
+              className="mb-8 max-w-[570px] lg:mb-0"
               data-wow-delay=".15s"
             >
               <div className="mx-[-12px] flex flex-wrap">
@@ -48,7 +48,8 @@ const AboutSectionOne = () => {
             </div>
           </div>
 
-          <div className="w-full px-4 lg:w-1/2">
+          {/* AnimatedCubes - Hidden on mobile/tablet, shown on desktop */}
+          <div className="hidden lg:block w-full px-4 lg:w-1/2">
             <div className="relative flex items-center justify-center min-h-[400px]">
               <div className="transform translate-y-[-50px]">
                 <AnimatedCubes />

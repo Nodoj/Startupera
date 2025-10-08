@@ -37,6 +37,31 @@ export default function RichTextEditor({
         heading: {
           levels: [1, 2, 3],
         },
+        bulletList: {
+          HTMLAttributes: {
+            class: 'list-disc list-inside',
+          },
+        },
+        orderedList: {
+          HTMLAttributes: {
+            class: 'list-decimal list-inside',
+          },
+        },
+        blockquote: {
+          HTMLAttributes: {
+            class: 'border-l-4 border-primary pl-4 italic',
+          },
+        },
+        codeBlock: {
+          HTMLAttributes: {
+            class: 'bg-gray-900 dark:bg-black text-white p-4 rounded-lg font-mono text-sm',
+          },
+        },
+        code: {
+          HTMLAttributes: {
+            class: 'text-primary bg-primary/10 px-1 py-0.5 rounded font-mono text-sm',
+          },
+        },
       }),
       Placeholder.configure({
         placeholder,
@@ -44,12 +69,12 @@ export default function RichTextEditor({
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-primary underline',
+          class: 'text-primary underline hover:text-primary/80',
         },
       }),
       Image.configure({
         HTMLAttributes: {
-          class: 'max-w-full h-auto rounded-lg',
+          class: 'max-w-full h-auto rounded-lg my-4',
         },
       }),
     ],
@@ -60,7 +85,7 @@ export default function RichTextEditor({
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg dark:prose-invert max-w-none focus:outline-none min-h-[300px] px-4 py-3',
+        class: 'prose prose-lg dark:prose-invert max-w-none focus:outline-none min-h-[300px] px-4 py-3 prose-h1:text-4xl prose-h1:font-bold prose-h1:mb-4 prose-h1:mt-6 prose-h2:text-3xl prose-h2:font-bold prose-h2:mb-3 prose-h2:mt-5 prose-h3:text-2xl prose-h3:font-bold prose-h3:mb-2 prose-h3:mt-4 prose-headings:text-black dark:prose-headings:text-white prose-p:text-body-color dark:prose-p:text-body-color-dark prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-black dark:prose-strong:text-white prose-ul:text-body-color dark:prose-ul:text-body-color-dark prose-ol:text-body-color dark:prose-ol:text-body-color-dark prose-li:marker:text-primary prose-blockquote:border-l-primary prose-blockquote:text-body-color dark:prose-blockquote:text-body-color-dark prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-900 dark:prose-pre:bg-black prose-img:rounded-lg',
       },
     },
   })
@@ -157,6 +182,79 @@ export default function RichTextEditor({
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
+      
+      {/* Custom heading styles for editor */}
+      <style jsx global>{`
+        .ProseMirror h1 {
+          font-size: 2.25rem !important;
+          font-weight: 700 !important;
+          margin-bottom: 1rem !important;
+          margin-top: 1.5rem !important;
+          line-height: 1.2 !important;
+        }
+        .ProseMirror h2 {
+          font-size: 1.875rem !important;
+          font-weight: 700 !important;
+          margin-bottom: 0.75rem !important;
+          margin-top: 1.25rem !important;
+          line-height: 1.3 !important;
+        }
+        .ProseMirror h3 {
+          font-size: 1.5rem !important;
+          font-weight: 700 !important;
+          margin-bottom: 0.5rem !important;
+          margin-top: 1rem !important;
+          line-height: 1.4 !important;
+        }
+        .ProseMirror ul,
+        .ProseMirror ol {
+          margin-top: 0.75rem !important;
+          margin-bottom: 0.75rem !important;
+          padding-left: 1.5rem !important;
+        }
+        .ProseMirror li {
+          margin-bottom: 0.25rem !important;
+        }
+        .ProseMirror blockquote {
+          border-left: 4px solid #4A6CF7 !important;
+          padding-left: 1rem !important;
+          font-style: italic !important;
+          margin: 1rem 0 !important;
+        }
+        .ProseMirror code {
+          background-color: rgba(74, 108, 247, 0.1) !important;
+          color: #4A6CF7 !important;
+          padding: 0.125rem 0.25rem !important;
+          border-radius: 0.25rem !important;
+          font-size: 0.875rem !important;
+        }
+        .ProseMirror pre {
+          background-color: #1a1a1a !important;
+          color: #fff !important;
+          padding: 1rem !important;
+          border-radius: 0.5rem !important;
+          overflow-x: auto !important;
+          margin: 1rem 0 !important;
+        }
+        .ProseMirror pre code {
+          background-color: transparent !important;
+          color: inherit !important;
+          padding: 0 !important;
+        }
+        .ProseMirror img {
+          max-width: 100% !important;
+          height: auto !important;
+          border-radius: 0.5rem !important;
+          margin: 1rem 0 !important;
+        }
+        .ProseMirror a {
+          color: #4A6CF7 !important;
+          text-decoration: underline !important;
+        }
+        .ProseMirror a:hover {
+          opacity: 0.8 !important;
+        }
+      `}</style>
       
       <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-white dark:bg-gray-800">
         {/* Mode Tabs */}

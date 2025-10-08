@@ -1,5 +1,4 @@
 import FlowsWithFilters from "@/components/Flows/FlowsWithFilters";
-import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 import { getPublishedFlows } from "@/lib/actions/flows";
 
@@ -15,10 +14,6 @@ const FlowsPage = async () => {
   
   return (
     <>
-      <Breadcrumb
-        pageName="Automation Flows"
-        description="Discover real-world automation solutions that transform businesses. From intelligent file processing to enterprise-grade AI support systems - see what's possible with our expertise."
-      />
       <FlowsWithFilters dbFlows={dbFlows} />
     </>
   );

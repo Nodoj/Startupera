@@ -20,9 +20,9 @@ export default async function AdminLayout({
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <ProgressBar />
       <AdminSidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col">
         {/* Admin Header */}
-        <header className="bg-white dark:bg-gray-dark shadow-sm border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <header className="sticky top-0 z-40 bg-white dark:bg-gray-dark shadow-sm border-b border-gray-200 dark:border-gray-700 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -48,7 +48,7 @@ export default async function AdminLayout({
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 p-6">
           {children}
         </main>
       </div>

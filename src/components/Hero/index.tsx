@@ -8,53 +8,62 @@ const Hero = () => {
     <>
       <section
         id="home"
-        className="relative overflow-hidden h-screen"
+        className="relative overflow-hidden h-screen bg-white dark:bg-gray-dark"
       >
-        <StarfieldBackground
-          starColor="#4A6CF7"
-          starSize={1.5}
-          starCount={400}
-          speed={0.0003}
-          className="absolute inset-0 h-full flex items-center justify-center"
-        >
-          <div className="container relative z-10 flex items-center justify-center h-full">
-            <div className="-mx-4 flex flex-wrap">
-              <div className="w-full px-4">
-                <div className="mx-auto max-w-[800px] text-center">
-                  <h1 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-6xl md:leading-tight drop-shadow-lg">
-                  TORA<span className="text-primary">FLOW</span><br />
-                  </h1>
-                  <h2 className="mb-5 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-4xl md:leading-tight drop-shadow-lg flex items-center justify-center gap-3">
-                    <Bot className="h-8 w-8 text-primary sm:h-10 sm:w-10 md:h-12 md:w-12" />
-                    AI that works for YOU
-                    <UserStar  className="h-8 w-8 text-primary sm:h-10 sm:w-10 md:h-12 md:w-12" />
-                  </h2>
-                  <p className="mb-12 text-base leading-relaxed text-gray-700 dark:text-gray-200 sm:text-lg md:text-xl drop-shadow-md">
-                  From automating the boring daily stuff to powering your big ideas<br /> We create AI automations that actually make life easier and work more productive
-                  </p>
-                  <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                    <Button
-                      href="/book-demo"
-                      variant="primary"
-                      size="md"
-                    >
-                      Schedule a Demo
-                    </Button>
-                    <Button
-                      href="#"
-                      variant="secondary"
-                      size="md"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View Our Work
-                    </Button>
-                  </div>
+        {/* StarfieldBackground - Desktop only (lg and above) */}
+        <div className="hidden lg:block absolute inset-0">
+          <StarfieldBackground
+            starColor="#4A6CF7"
+            starSize={1.5}
+            starCount={400}
+            speed={0.0003}
+            className="absolute inset-0 h-full"
+          />
+        </div>
+
+        {/* Simple gradient background for mobile/tablet */}
+        <div className="lg:hidden absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 dark:from-primary/10 dark:via-transparent dark:to-primary/20" />
+
+        {/* Content */}
+        <div className="container relative z-10 flex items-center justify-center h-full">
+          <div className="-mx-4 flex flex-wrap">
+            <div className="w-full px-4">
+              <div className="mx-auto max-w-[800px] text-center">
+                <h1 className="mb-4 text-4xl font-bold leading-tight text-black dark:text-white sm:mb-5 sm:text-5xl sm:leading-tight md:text-6xl md:leading-tight lg:text-6xl drop-shadow-lg">
+                  TORA<span className="text-primary">FLOW</span>
+                </h1>
+                <h2 className="mb-4 text-2xl font-bold leading-tight text-black dark:text-white sm:mb-5 sm:text-3xl sm:leading-tight md:text-4xl md:leading-tight lg:text-4xl drop-shadow-lg flex items-center justify-center gap-2 sm:gap-3">
+                  <Bot className="h-6 w-6 text-primary sm:h-8 sm:w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
+                  AI that works for YOU
+                  <UserStar className="h-6 w-6 text-primary sm:h-8 sm:w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
+                </h2>
+                <p className="mb-8 text-sm leading-relaxed text-gray-700 dark:text-gray-200 px-4 sm:mb-10 sm:text-base sm:px-0 md:mb-12 md:text-lg lg:text-xl drop-shadow-md">
+                  From automating the boring daily stuff to powering your big ideas<br className="hidden sm:block" /> We create AI automations that actually make life easier and work more productive
+                </p>
+                <div className="flex flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-4 sm:px-0">
+                  <Button
+                    href="/book-demo"
+                    variant="primary"
+                    size="sm"
+                    className="w-full sm:w-auto"
+                  >
+                    Schedule a Demo
+                  </Button>
+                  <Button
+                    href="#"
+                    variant="secondary"
+                    size="sm"
+                    className="w-full sm:w-auto"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Our Work
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </StarfieldBackground>
+        </div>
 
         {/* Keep the existing decorative SVGs but make them more subtle */}
         {/* <div className="absolute right-0 top-0 z-[1] opacity-20 lg:opacity-30">

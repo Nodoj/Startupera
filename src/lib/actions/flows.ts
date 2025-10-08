@@ -48,7 +48,7 @@ export async function getFlows(filters?: FlowFilters) {
   }
   
   if (filters?.search) {
-    query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`)
+    query = query.or(`title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`)
   }
   
   const { data, error } = await query.order('created_at', { ascending: false })

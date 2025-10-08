@@ -58,6 +58,7 @@ interface ContentFilterProps {
   filteredItems: number;
   contentType: 'blog' | 'flows';
   className?: string;
+  initialViewMode?: 'grid' | 'list';
 }
 
 const ContentFilter = ({
@@ -67,10 +68,11 @@ const ContentFilter = ({
   totalItems,
   filteredItems,
   contentType,
-  className = ""
+  className = "",
+  initialViewMode = 'grid'
 }: ContentFilterProps) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(initialViewMode);
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
     selectedCategory: 'all',
@@ -181,9 +183,9 @@ const ContentFilter = ({
   return (
     <div className={`mb-8 ${className}`}>
       {/* Enhanced Control Bar with Integrated Search */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-dark/50 backdrop-blur-sm border border-stroke/30 dark:border-stroke-dark/30 relative z-10">
+      <div className="mb-6 flex flex-col lg:flex-row lg:flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-gray-50/50 to-white/50 dark:from-gray-800/50 dark:to-gray-dark/50 backdrop-blur-sm border border-stroke/30 dark:border-stroke-dark/30 relative z-10">
         {/* Left Section: Results and View Controls */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 w-full lg:w-auto justify-between lg:justify-start">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-black dark:text-white">
@@ -194,8 +196,8 @@ const ContentFilter = ({
             </span>
           </div>
 
-          {/* View Mode Toggle */}
-          <div className="flex items-center rounded-lg bg-white dark:bg-gray-800 border border-stroke dark:border-stroke-dark p-1">
+          {/* View Mode Toggle - Hidden on mobile */}
+          <div className="hidden lg:flex items-center rounded-lg bg-white dark:bg-gray-800 border border-stroke dark:border-stroke-dark p-1">
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-md transition-all ${
@@ -221,51 +223,54 @@ const ContentFilter = ({
           </div>
         </div>
 
-        {/* Center Section: Search Input */}
-        <div className="flex-1 max-w-md mx-4">
-          <div className="relative group">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color/60 group-focus-within:text-primary transition-colors" />
-            <input
-              type="text"
-              placeholder={`Search ${contentType === 'flows' ? 'flows' : 'articles'}...`}
-              value={filters.searchTerm}
-              onChange={(e) => updateFilter('searchTerm', e.target.value)}
-              className="w-full rounded-xl border border-stroke/50 dark:border-stroke-dark/50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm pl-10 pr-10 py-2.5 text-sm font-medium placeholder:text-body-color/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-            />
-            {filters.searchTerm && (
-              <button
-                onClick={() => updateFilter('searchTerm', '')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-body-color/60 hover:text-red-500 transition-colors"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            )}
+        {/* Center Section: Search Input with Sort on Mobile */}
+        <div className="flex-1 w-full lg:max-w-md lg:mx-4">
+          <div className="flex items-center gap-2">
+            <div className="relative group flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-body-color/60 group-focus-within:text-primary transition-colors" />
+              <input
+                type="text"
+                placeholder={`Search ${contentType === 'flows' ? 'flows' : 'articles'}...`}
+                value={filters.searchTerm}
+                onChange={(e) => updateFilter('searchTerm', e.target.value)}
+                className="w-full rounded-xl border border-stroke/50 dark:border-stroke-dark/50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm pl-10 pr-10 py-2.5 text-sm font-medium placeholder:text-body-color/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+              />
+              {filters.searchTerm && (
+                <button
+                  onClick={() => updateFilter('searchTerm', '')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-body-color/60 hover:text-red-500 transition-colors"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+            </div>
+            
+            {/* Sort Order Toggle - Next to search on mobile, in right section on desktop */}
+            <button
+              onClick={() => updateFilter('sortOrder', filters.sortOrder === 'asc' ? 'desc' : 'asc')}
+              className="lg:hidden p-2.5 rounded-xl border border-stroke dark:border-stroke-dark bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
+              title={`Sort ${filters.sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
+            >
+              <ArrowUpDown className={`h-4 w-4 transition-transform ${filters.sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+            </button>
           </div>
         </div>
 
         {/* Right Section: Sort and Filter Controls */}
-        <div className="flex items-center gap-3">
-          {/* Sort Dropdown */}
-          <CustomSelect
-            options={sortOptions}
-            value={filters.sortBy}
-            onChange={(value) => updateFilter('sortBy', value)}
-            className="w-48"
-          />
-
-          {/* Sort Order Toggle */}
+        <div className="flex items-center gap-3 w-full lg:w-auto">
+          {/* Sort Order Toggle - Desktop only */}
           <button
             onClick={() => updateFilter('sortOrder', filters.sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="p-2.5 rounded-xl border border-stroke dark:border-stroke-dark bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="hidden lg:block p-2.5 rounded-xl border border-stroke dark:border-stroke-dark bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             title={`Sort ${filters.sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
           >
             <ArrowUpDown className={`h-4 w-4 transition-transform ${filters.sortOrder === 'desc' ? 'rotate-180' : ''}`} />
           </button>
 
-          {/* Advanced Filter Toggle */}
+          {/* Advanced Filter Toggle - Full width on mobile */}
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 ${
+            className={`flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 w-full lg:w-auto ${
               hasActiveFilters
                 ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25'
                 : 'border border-stroke dark:border-stroke-dark bg-white dark:bg-gray-800 text-body-color hover:bg-gray-50 dark:hover:bg-gray-700'
@@ -352,7 +357,7 @@ const ContentFilter = ({
 
       {/* Advanced Filter Panel */}
       {isFilterOpen && (
-        <div className="rounded-2xl border border-stroke/30 dark:border-stroke-dark/30 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-dark dark:to-gray-800/50 backdrop-blur-sm p-8 shadow-xl">
+        <div className="relative z-50 rounded-2xl border border-stroke/30 dark:border-stroke-dark/30 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-dark dark:to-gray-800/50 backdrop-blur-sm p-8 shadow-xl">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-primary/10">

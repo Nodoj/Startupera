@@ -1,5 +1,4 @@
 import ComprehensiveAbout from "@/components/About/ComprehensiveAbout";
-import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,10 +10,6 @@ export const metadata: Metadata = {
 const AboutPage = () => {
   return (
     <>
-      <Breadcrumb
-        pageName="About Toraflow"
-        description="Meet our passionate team of technology experts who turn dreams into reality. With 15+ years of experience and no limitations, we're here to build something meaningful just for you."
-      />
       <ComprehensiveAbout />
     </>
   );

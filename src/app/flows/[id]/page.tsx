@@ -1,6 +1,5 @@
 import { getFlow, getPublishedFlowIds, getPublishedFlows } from "@/lib/actions/flows";
 import FlowDetailsBlog from "@/components/Flows/FlowDetailsBlog";
-import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -60,10 +59,6 @@ const FlowDetailsPage = async ({ params }: Props) => {
 
   return (
     <>
-      <Breadcrumb
-        pageName={flow.title}
-        description={flow.excerpt || flow.description || ''}
-      />
       <FlowDetailsBlog 
         flow={flow} 
         relatedFlows={relatedFlows}

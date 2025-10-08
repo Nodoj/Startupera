@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import SingleFlow from "./SingleFlow";
 import ContentFilter, { FilterState } from "@/components/Common/ContentFilter";
 import { filterContent, sortContent, generateFilterConfig } from "@/utils/filterUtils";
@@ -11,9 +11,17 @@ interface FlowsWithFiltersProps {
 }
 
 const FlowsWithFilters = ({ dbFlows = [] }: FlowsWithFiltersProps) => {
+  // Default to list view on mobile, grid on desktop
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // 9 items per page (3x3 grid)
+  
+  // Set list view on mobile by default
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      setViewMode('list');
+    }
+  }, []);
   
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
@@ -84,15 +92,15 @@ const FlowsWithFilters = ({ dbFlows = [] }: FlowsWithFiltersProps) => {
   };
 
   return (
-    <section className="pb-[120px]">
+    <section className="pb-16 pt-20 sm:pb-20 sm:pt-24 lg:pb-28 lg:pt-32">
       <div className="container">
-        {/* Header Section */}
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-black dark:text-white sm:text-4xl md:text-[45px]">
-            Explore Our Automation Flows
-          </h2>
-          <p className="mx-auto max-w-3xl text-base text-body-color dark:text-body-color-dark sm:text-lg">
-            Browse through our collection of AI-powered automation workflows. Each flow represents a real-world solution designed to streamline operations, boost productivity, and drive business growth.
+        {/* Page Title */}
+        <div className="mb-8 sm:mb-10 lg:mb-12 text-center">
+          <h1 className="mb-4 text-3xl font-bold text-black dark:text-white sm:text-4xl lg:text-5xl">
+            Automation Flows
+          </h1>
+          <p className="text-base text-body-color dark:text-body-color-dark sm:text-lg max-w-3xl mx-auto">
+            Discover real-world automation solutions that transform businesses. From intelligent file processing to enterprise-grade AI support systems - see what&apos;s possible with our expertise.
           </p>
         </div>
 
@@ -137,19 +145,20 @@ const FlowsWithFilters = ({ dbFlows = [] }: FlowsWithFiltersProps) => {
         {filteredAndSortedFlows.length > 0 && totalPages > 1 && (
           <div className="-mx-4 flex flex-wrap" data-wow-delay=".15s">
             <div className="w-full px-4">
-              <ul className="flex items-center justify-center pt-8 gap-1">
+              <ul className="flex items-center justify-center pt-8 gap-1 flex-wrap">
                 {/* Previous Button */}
                 <li>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition ${
+                    className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-3 sm:px-4 text-xs sm:text-sm transition ${
                       currentPage === 1
                         ? 'bg-body-color/5 text-body-color/50 cursor-not-allowed'
                         : 'bg-body-color/15 text-body-color hover:bg-primary hover:text-white'
                     }`}
                   >
-                    Prev
+                    <span className="hidden sm:inline">Prev</span>
+                    <span className="sm:hidden">‹</span>
                   </button>
                 </li>
 
@@ -181,7 +190,7 @@ const FlowsWithFilters = ({ dbFlows = [] }: FlowsWithFiltersProps) => {
                     <li key={page}>
                       <button
                         onClick={() => handlePageChange(page)}
-                        className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition ${
+                        className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-3 sm:px-4 text-xs sm:text-sm transition ${
                           currentPage === page
                             ? 'bg-primary text-white'
                             : 'bg-body-color/15 text-body-color hover:bg-primary hover:text-white'
@@ -198,20 +207,21 @@ const FlowsWithFilters = ({ dbFlows = [] }: FlowsWithFiltersProps) => {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-4 text-sm transition ${
+                    className={`flex h-9 min-w-[36px] items-center justify-center rounded-md px-3 sm:px-4 text-xs sm:text-sm transition ${
                       currentPage === totalPages
                         ? 'bg-body-color/5 text-body-color/50 cursor-not-allowed'
                         : 'bg-body-color/15 text-body-color hover:bg-primary hover:text-white'
                     }`}
                   >
-                    Next
+                    <span className="hidden sm:inline">Next</span>
+                    <span className="sm:hidden">›</span>
                   </button>
                 </li>
               </ul>
 
               {/* Pagination Info */}
               <div className="text-center mt-4">
-                <p className="text-sm text-body-color dark:text-body-color-dark">
+                <p className="text-xs sm:text-sm text-body-color dark:text-body-color-dark">
                   Showing {startIndex + 1} to {Math.min(endIndex, filteredAndSortedFlows.length)} of {filteredAndSortedFlows.length} flows
                 </p>
               </div>

@@ -3,9 +3,24 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createFlow, updateFlow } from '@/lib/actions/flows'
-import { uploadFlowImage } from '@/lib/supabase/storage'
+import { uploadFlowImage, deleteFlowImage } from '@/lib/supabase/storage'
 import { adminTheme } from '@/styles/admin-theme'
-import { Save, ArrowLeft, Plus, X, Upload, Loader2 } from 'lucide-react'
+import { 
+  Save, 
+  ArrowLeft, 
+  Plus, 
+  X, 
+  Upload, 
+  Loader2, 
+  ImageIcon, 
+  FileText, 
+  Edit3,
+  FolderOpen,
+  Tag,
+  Zap,
+  Clock,
+  TrendingUp
+} from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import RichTextEditor from './RichTextEditor'
@@ -28,10 +43,12 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
   const [imagePreview, setImagePreview] = useState(initialData?.featured_image || '')
   const [isDragging, setIsDragging] = useState(false)
   
-  // Gallery state
-  const [galleryFiles, setGalleryFiles] = useState<File[]>([])
-  const [galleryPreviews, setGalleryPreviews] = useState<string[]>(initialData?.gallery || [])
+  // Gallery state - separate existing URLs from new files
+  const [existingGalleryUrls, setExistingGalleryUrls] = useState<string[]>(initialData?.gallery || [])
+  const [newGalleryFiles, setNewGalleryFiles] = useState<File[]>([])
+  const [newGalleryPreviews, setNewGalleryPreviews] = useState<string[]>([])
   const [isGalleryDragging, setIsGalleryDragging] = useState(false)
+  const [deletedGalleryUrls, setDeletedGalleryUrls] = useState<string[]>([])
   
   // Technologies state
   const [technologies, setTechnologies] = useState<string[]>(initialData?.technologies || [])
@@ -67,9 +84,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
   const [complexity, setComplexity] = useState(initialData?.complexity || '')
 
   // Blog content state
-  const [excerpt, setExcerpt] = useState(initialData?.excerpt || '')
   const [content, setContent] = useState(initialData?.content || '')
-  const [readingTime, setReadingTime] = useState(initialData?.reading_time || '')
 
   const handleImageSelect = (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -153,13 +168,13 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
       reader.onloadend = () => {
         newPreviews.push(reader.result as string)
         if (newPreviews.length === validFiles.length) {
-          setGalleryPreviews([...galleryPreviews, ...newPreviews])
+          setNewGalleryPreviews([...newGalleryPreviews, ...newPreviews])
         }
       }
       reader.readAsDataURL(file)
     })
 
-    setGalleryFiles([...galleryFiles, ...validFiles])
+    setNewGalleryFiles([...newGalleryFiles, ...validFiles])
   }
 
   const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,9 +200,18 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
     handleGallerySelect(e.dataTransfer.files)
   }
 
-  const removeGalleryImage = (index: number) => {
-    setGalleryPreviews(galleryPreviews.filter((_, i) => i !== index))
-    setGalleryFiles(galleryFiles.filter((_, i) => i !== index))
+  const removeGalleryImage = async (index: number, isExisting: boolean) => {
+    if (isExisting) {
+      // Mark existing URL for deletion
+      const urlToDelete = existingGalleryUrls[index]
+      setDeletedGalleryUrls([...deletedGalleryUrls, urlToDelete])
+      setExistingGalleryUrls(existingGalleryUrls.filter((_, i) => i !== index))
+    } else {
+      // Remove new file from preview
+      const adjustedIndex = index - existingGalleryUrls.length
+      setNewGalleryPreviews(newGalleryPreviews.filter((_, i) => i !== adjustedIndex))
+      setNewGalleryFiles(newGalleryFiles.filter((_, i) => i !== adjustedIndex))
+    }
   }
 
   // Handle adding custom technology
@@ -211,7 +235,14 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
     try {
       const formData = new FormData(e.currentTarget)
       
-      // Upload featured image
+      // Delete marked gallery images from storage first
+      if (deletedGalleryUrls.length > 0) {
+        for (const url of deletedGalleryUrls) {
+          await deleteFlowImage(url)
+        }
+      }
+      
+      // Upload featured image if new file selected
       let uploadedImageUrl = initialData?.featured_image || null
       if (imageFile) {
         uploadedImageUrl = await uploadFlowImage(imageFile)
@@ -222,23 +253,22 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
         }
       }
 
-      // Upload gallery images
-      const uploadedGalleryUrls: string[] = [...(initialData?.gallery || [])]
-      if (galleryFiles.length > 0) {
-        for (const file of galleryFiles) {
+      // Upload new gallery images only (not existing ones)
+      const uploadedGalleryUrls: string[] = [...existingGalleryUrls]
+      if (newGalleryFiles.length > 0) {
+        for (const file of newGalleryFiles) {
           const url = await uploadFlowImage(file)
           if (url) {
             uploadedGalleryUrls.push(url)
+          } else {
+            console.error('Failed to upload gallery image:', file.name)
           }
         }
       }
       
       const flowData = {
         title: formData.get('title') as string,
-        description: excerpt, // Use excerpt for description (backward compatibility)
-        excerpt: excerpt, // Also store in excerpt field
         content: content,
-        reading_time: readingTime ? parseInt(readingTime) : null,
         category: categories[0] || '', // Use first category for backward compatibility
         categories: categories, // Store all categories
         complexity: formData.get('complexity') as string,
@@ -246,7 +276,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
         roi: formData.get('roi') as string,
         technologies: technologies,
         featured_image: uploadedImageUrl,
-        gallery: uploadedGalleryUrls, // Gallery images
+        gallery: uploadedGalleryUrls, // Gallery images (existing + newly uploaded)
         status: status,
       }
 
@@ -267,9 +297,9 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
   }
 
   return (
-    <div className="space-y-6">
+    <>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between">
         <Link
           href="/admin/flows"
           className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
@@ -281,13 +311,19 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
 
       <form onSubmit={handleSubmit}>
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-wrap -mx-4">
           {/* LEFT COLUMN (2/3 width) */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="w-full px-4 lg:w-8/12 xl:w-9/12">
+            <div className="space-y-6">
             
             {/* 1. Images (Featured + Gallery) */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
-              <h3 className={`${adminTheme.typography.h3} mb-6`}>Images</h3>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <ImageIcon className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className={`${adminTheme.typography.h3}`}>Images</h3>
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Featured Image Column */}
@@ -355,14 +391,15 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                     Gallery Images (Optional)
                   </h4>
                   
-                  {/* Gallery Grid */}
-                  {galleryPreviews.length > 0 && (
+                  {/* Gallery Grid - Show existing + new images */}
+                  {(existingGalleryUrls.length > 0 || newGalleryPreviews.length > 0) && (
                     <div className="grid grid-cols-2 gap-3 mb-3">
-                      {galleryPreviews.map((preview, index) => (
-                        <div key={index} className="relative group">
+                      {/* Existing gallery images */}
+                      {existingGalleryUrls.map((url, index) => (
+                        <div key={`existing-${index}`} className="relative group">
                           <div className="relative w-full h-24 rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700">
                             <Image
-                              src={preview}
+                              src={url}
                               alt={`Gallery ${index + 1}`}
                               fill
                               className="object-cover"
@@ -370,7 +407,31 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                           </div>
                           <button
                             type="button"
-                            onClick={() => removeGalleryImage(index)}
+                            onClick={() => removeGalleryImage(index, true)}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors shadow-lg opacity-0 group-hover:opacity-100"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                      {/* New gallery images (not yet uploaded) */}
+                      {newGalleryPreviews.map((preview, index) => (
+                        <div key={`new-${index}`} className="relative group">
+                          <div className="relative w-full h-24 rounded-lg overflow-hidden border-2 border-blue-300 dark:border-blue-600">
+                            <Image
+                              src={preview}
+                              alt={`New ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                            {/* New badge */}
+                            <div className="absolute top-1 left-1 bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded">
+                              NEW
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(existingGalleryUrls.length + index, false)}
                             className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors shadow-lg opacity-0 group-hover:opacity-100"
                           >
                             <X className="h-3 w-3" />
@@ -387,7 +448,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                     onDragLeave={handleGalleryDragLeave}
                     onDrop={handleGalleryDrop}
                     className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
-                      galleryPreviews.length > 0 ? 'h-auto' : 'h-64 flex items-center justify-center'
+                      (existingGalleryUrls.length + newGalleryPreviews.length) > 0 ? 'h-auto' : 'h-64 flex items-center justify-center'
                     } ${
                       isGalleryDragging
                         ? 'border-primary bg-primary/10 scale-105'
@@ -425,7 +486,8 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
 
             {/* 2. Flow Title */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
-              <label htmlFor="title" className={`${adminTheme.typography.label} mb-3 block`}>
+              <label htmlFor="title" className={`${adminTheme.typography.label} mb-3 flex items-center gap-2`}>
+                <FileText className="h-4 w-4 text-primary" />
                 Flow Title *
               </label>
               <input
@@ -439,27 +501,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
               />
             </div>
 
-            {/* 3. Excerpt (replaces both description and excerpt) */}
-            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
-              <label htmlFor="excerpt" className={`${adminTheme.typography.label} mb-3 block`}>
-                Excerpt *
-              </label>
-              <textarea
-                id="excerpt"
-                name="excerpt"
-                required
-                rows={4}
-                value={excerpt}
-                onChange={(e) => setExcerpt(e.target.value)}
-                className={`${adminTheme.input.base} resize-none`}
-                placeholder="A compelling introduction (2-3 sentences). Used in flow cards, below title, and for SEO meta description..."
-              />
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                This excerpt will be used in: flow listing cards, below the title on the detail page, and as the meta description for SEO.
-              </p>
-            </div>
-
-            {/* 5. Main Content (Rich Text Editor) */}
+            {/* 2. Main Content (Rich Text Editor) */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.lg}`}>
               <RichTextEditor
                 content={content}
@@ -471,14 +513,19 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                 This is the main blog-style content that will appear in the overview section.
               </p>
             </div>
+            </div>
           </div>
 
-          {/* RIGHT COLUMN (1/3 width) */}
-          <div className="space-y-6">
+          {/* RIGHT COLUMN (1/3 width) - Sticky Sidebar */}
+          <div className="w-full px-4 lg:w-4/12 xl:w-3/12">
+            <aside className="space-y-6 lg:sticky lg:top-24">
             
             {/* Publish Status - Colored Buttons */}
-            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md} sticky top-6`}>
-              <h3 className={`${adminTheme.typography.h4} mb-4`}>Publish Status</h3>
+            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
+              <div className="flex items-center gap-2 mb-4">
+                <Edit3 className="h-4 w-4 text-primary" />
+                <h3 className={`${adminTheme.typography.h4}`}>Publish Status</h3>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -505,28 +552,49 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
               </div>
             </div>
 
-            {/* Categories - Multi-select */}
-            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
-              <label className={`${adminTheme.typography.label} mb-3 block`}>
-                Categories
-              </label>
-              
-              <CustomMultiSelect
-                options={categoryOptions}
-                value={categories}
-                onChange={setCategories}
-                placeholder="Select categories"
-                searchable={true}
-                allowCustom={true}
-                onAddCustom={handleAddCustomCategory}
-              />
-            </div>
-
-            {/* Complexity / Time to Implement */}
+            {/* Categories & Technologies */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
               <div className="space-y-4">
                 <div>
-                  <label className={`${adminTheme.typography.label} mb-2 block`}>
+                  <label className={`${adminTheme.typography.label} mb-3 flex items-center gap-2`}>
+                    <FolderOpen className="h-4 w-4 text-primary" />
+                    Categories
+                  </label>
+                  <CustomMultiSelect
+                    options={categoryOptions}
+                    value={categories}
+                    onChange={setCategories}
+                    placeholder="Select categories"
+                    searchable={true}
+                    allowCustom={true}
+                    onAddCustom={handleAddCustomCategory}
+                  />
+                </div>
+
+                <div>
+                  <label className={`${adminTheme.typography.label} mb-3 flex items-center gap-2`}>
+                    <Tag className="h-4 w-4 text-primary" />
+                    Technologies
+                  </label>
+                  <CustomMultiSelect
+                    options={technologyOptions}
+                    value={technologies}
+                    onChange={setTechnologies}
+                    placeholder="Select technologies"
+                    searchable={true}
+                    allowCustom={true}
+                    onAddCustom={handleAddCustomTech}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Complexity / Time to Implement / Expected ROI */}
+            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
+              <div className="space-y-4">
+                <div>
+                  <label className={`${adminTheme.typography.label} mb-2 flex items-center gap-2`}>
+                    <Zap className="h-4 w-4 text-primary" />
                     Complexity *
                   </label>
                   <CustomSelect
@@ -544,7 +612,8 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                 </div>
 
                 <div>
-                  <label htmlFor="time_to_implement" className={`${adminTheme.typography.label} mb-2 block`}>
+                  <label htmlFor="time_to_implement" className={`${adminTheme.typography.label} mb-2 flex items-center gap-2`}>
+                    <Clock className="h-4 w-4 text-primary" />
                     Time to Implement
                   </label>
                   <input
@@ -556,84 +625,53 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                     placeholder="e.g., 2-4 weeks"
                   />
                 </div>
+
+                <div>
+                  <label htmlFor="roi" className={`${adminTheme.typography.label} mb-2 flex items-center gap-2`}>
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                    Expected ROI
+                  </label>
+                  <input
+                    type="text"
+                    id="roi"
+                    name="roi"
+                    defaultValue={initialData?.roi}
+                    className={adminTheme.input.base}
+                    placeholder="e.g., 300% ROI, Saves 20 hours/week"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Expected ROI */}
+            {/* Submit Button - In Sidebar */}
             <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
-              <label htmlFor="roi" className={`${adminTheme.typography.label} mb-3 block`}>
-                Expected ROI
-              </label>
-              <input
-                type="text"
-                id="roi"
-                name="roi"
-                defaultValue={initialData?.roi}
-                className={adminTheme.input.base}
-                placeholder="e.g., 300% ROI, Saves 20 hours/week"
-              />
+              <button
+                type="submit"
+                disabled={isSubmitting || categories.length === 0}
+                className={`w-full inline-flex items-center justify-center px-6 py-3 ${adminTheme.button.primary} text-base disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    {isEditing ? 'Updating...' : 'Creating...'}
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5 mr-2" />
+                    {isEditing ? 'Update Flow' : 'Create Flow'}
+                  </>
+                )}
+              </button>
+              {categories.length === 0 && (
+                <p className="mt-2 text-xs text-red-500 dark:text-red-400">
+                  Please select at least one category
+                </p>
+              )}
             </div>
-
-            {/* Reading Time */}
-            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
-              <label htmlFor="reading_time" className={`${adminTheme.typography.label} mb-3 block`}>
-                Reading Time (minutes)
-              </label>
-              <input
-                type="number"
-                id="reading_time"
-                name="reading_time"
-                value={readingTime}
-                onChange={(e) => setReadingTime(e.target.value)}
-                className={adminTheme.input.base}
-                placeholder="e.g., 5"
-                min="1"
-              />
-              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                Estimated time to read the full article
-              </p>
-            </div>
-
-            {/* Technologies */}
-            <div className={`${adminTheme.card.base} ${adminTheme.card.padding.md}`}>
-              <label className={`${adminTheme.typography.label} mb-3 block`}>
-                Technologies
-              </label>
-              
-              <CustomMultiSelect
-                options={technologyOptions}
-                value={technologies}
-                onChange={setTechnologies}
-                placeholder="Select technologies"
-                searchable={true}
-                allowCustom={true}
-                onAddCustom={handleAddCustomTech}
-              />
-            </div>
+            </aside>
           </div>
         </div>
-
-        {/* Submit Button - Bottom Center */}
-        <div className="flex justify-center mt-8">
-          <button
-            type="submit"
-            disabled={isSubmitting || categories.length === 0}
-            className={`inline-flex items-center px-8 py-3 ${adminTheme.button.primary} text-base disabled:opacity-50 disabled:cursor-not-allowed`}
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                {isEditing ? 'Updating...' : 'Creating...'}
-              </>
-            ) : (
-              <>
-                <Save className="h-5 w-5 mr-2" />
-                {isEditing ? 'Update Flow' : 'Create Flow'}
-              </>
-            )}
-          </button>
-        </div>
       </form>
-    </div>
+    </>
   )
 }
