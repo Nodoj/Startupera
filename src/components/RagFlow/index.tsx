@@ -181,6 +181,7 @@ const RagFlow = () => {
   const [mounted, setMounted] = useState(false);
   const [currentDiagram, setCurrentDiagram] = useState('rag');
   const [isMobile, setIsMobile] = useState(false);
+  const [isCanvasActive, setIsCanvasActive] = useState(false);
   const isDark = resolvedTheme === 'dark';
 
   // Node types - memoized once
@@ -223,6 +224,56 @@ const RagFlow = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Handle canvas click to activate/deactivate scroll zoom
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Check if click is outside the ReactFlow canvas
+      if (!target.closest('.react-flow')) {
+        setIsCanvasActive(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  // Handle wheel event to detect when user tries to scroll past canvas
+  useEffect(() => {
+    if (isMobile) return;
+
+    let wheelTimeout: NodeJS.Timeout;
+    const handleWheel = (e: WheelEvent) => {
+      const target = e.target as HTMLElement;
+      const isOverCanvas = target.closest('.react-flow');
+      
+      // If wheel event is over canvas and canvas is active
+      if (isOverCanvas && isCanvasActive) {
+        // Set a timeout to deactivate after user stops scrolling
+        clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(() => {
+          setIsCanvasActive(false);
+        }, 150);
+      }
+      
+      // If wheel event is over canvas but canvas is NOT active, deactivate immediately
+      // This allows page scroll to work
+      if (isOverCanvas && !isCanvasActive) {
+        setIsCanvasActive(false);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      clearTimeout(wheelTimeout);
+    };
+  }, [isCanvasActive, isMobile]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((prevEdges) => addEdge(params, prevEdges)),
@@ -274,7 +325,14 @@ const RagFlow = () => {
 
         <div className="relative">
           {/* Flow Container */}
-          <div className="w-full h-[400px] sm:h-[500px] lg:h-[600px] bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-lg overflow-hidden">
+          <div 
+            className={`w-full h-[400px] sm:h-[500px] lg:h-[600px] bg-white dark:bg-gray-dark rounded-xl border shadow-lg overflow-hidden transition-all duration-300 ${
+              isCanvasActive 
+                ? 'border-primary shadow-primary/50 shadow-2xl' 
+                : 'border-stroke dark:border-stroke-dark'
+            }`}
+            onClick={() => !isMobile && setIsCanvasActive(true)}
+          >
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -296,10 +354,10 @@ const RagFlow = () => {
               elementsSelectable={!isMobile}
               panOnDrag={!isMobile}
               panOnScroll={false}
-              zoomOnScroll={!isMobile}
+              zoomOnScroll={!isMobile && isCanvasActive}
               zoomOnPinch={!isMobile}
               zoomOnDoubleClick={false}
-              preventScrolling={true}
+              preventScrolling={isCanvasActive}
               nodeOrigin={[0.5, 0.5]}
               selectNodesOnDrag={false}
               className="bg-transparent"
@@ -362,6 +420,15 @@ const RagFlow = () => {
                 size={1} 
                 color={isDark ? "#374151" : "#e2e8f0"}
               />
+              
+              {/* Click to activate hint - Desktop only */}
+              {!isMobile && !isCanvasActive && (
+                <Panel position="bottom-center" className="!pointer-events-none">
+                  <div className="bg-black/70 text-white px-4 py-2 rounded-lg text-sm">
+                    Click to activate scroll zoom
+                  </div>
+                </Panel>
+              )}
             </ReactFlow>
           </div>
 
