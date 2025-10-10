@@ -81,7 +81,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
   ])
 
   // Complexity state
-  const [complexity, setComplexity] = useState(initialData?.complexity || '')
+  const [complexity, setComplexity] = useState(initialData?.complexity || 'beginner')
 
   // Blog content state
   const [content, setContent] = useState(initialData?.content || '')
@@ -271,7 +271,7 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
         content: content,
         category: categories[0] || '', // Use first category for backward compatibility
         categories: categories, // Store all categories
-        complexity: formData.get('complexity') as string,
+        complexity: complexity, // Use state directly
         time_to_implement: formData.get('time_to_implement') as string,
         roi: formData.get('roi') as string,
         technologies: technologies,
@@ -662,11 +662,6 @@ export default function TwoColumnFlowForm({ initialData, isEditing = false }: Tw
                   </>
                 )}
               </button>
-              {categories.length === 0 && (
-                <p className="mt-2 text-xs text-red-500 dark:text-red-400">
-                  Please select at least one category
-                </p>
-              )}
             </div>
             </aside>
           </div>

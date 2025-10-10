@@ -34,6 +34,40 @@ export async function uploadFlowImage(file: File): Promise<string | null> {
   }
 }
 
+export async function uploadContentImage(file: File): Promise<string | null> {
+  try {
+    const supabase = createClient()
+    
+    // Generate unique filename
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`
+    const filePath = `content-images/${fileName}`
+
+    // Upload file to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from('flow-images')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (error) {
+      console.error('Upload error:', error)
+      return null
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('flow-images')
+      .getPublicUrl(filePath)
+
+    return publicUrl
+  } catch (error) {
+    console.error('Error uploading content image:', error)
+    return null
+  }
+}
+
 export async function deleteFlowImage(url: string): Promise<boolean> {
   try {
     const supabase = createClient()

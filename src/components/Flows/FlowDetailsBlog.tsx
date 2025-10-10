@@ -60,37 +60,47 @@ const FlowDetailsBlog = ({
       {/* Custom styles for flow content */}
       <style jsx global>{`
         .flow-content h1 {
-          font-size: 2.25rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-          margin-top: 1.5rem;
-          line-height: 1.2;
-          color: inherit;
-        }
-        .flow-content h2 {
           font-size: 1.875rem;
           font-weight: 700;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.875rem;
           margin-top: 1.25rem;
           line-height: 1.3;
           color: inherit;
         }
-        .flow-content h3 {
+        .flow-content h2 {
           font-size: 1.5rem;
           font-weight: 700;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.75rem;
           margin-top: 1rem;
           line-height: 1.4;
+          color: inherit;
+        }
+        .flow-content h3 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          margin-top: 0.875rem;
+          line-height: 1.5;
           color: inherit;
         }
         .flow-content ul,
         .flow-content ol {
           margin-top: 0.75rem;
           margin-bottom: 0.75rem;
-          padding-left: 1.5rem;
+          padding-left: 0;
+          margin-left: 1.5rem;
         }
         .flow-content li {
           margin-bottom: 0.25rem;
+          padding-left: 0.25rem;
+        }
+        .flow-content ul {
+          list-style-type: disc;
+          list-style-position: outside;
+        }
+        .flow-content ol {
+          list-style-type: decimal;
+          list-style-position: outside;
         }
         .flow-content blockquote {
           border-left: 4px solid #4A6CF7;
