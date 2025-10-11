@@ -25,7 +25,7 @@ const Hero = () => {
         <div className="lg:hidden absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 dark:from-primary/10 dark:via-transparent dark:to-primary/20" />
 
         {/* Content */}
-        <div className="container relative z-10 flex items-center justify-center h-full">
+        <div className="container relative z-10 flex items-center justify-center h-full pointer-events-none">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
               <div className="mx-auto max-w-[800px] text-center">
@@ -40,7 +40,7 @@ const Hero = () => {
                 <p className="mb-8 text-sm leading-relaxed text-gray-700 dark:text-gray-200 px-4 sm:mb-10 sm:text-base sm:px-0 md:mb-12 md:text-lg lg:text-xl drop-shadow-md">
                   From automating the boring daily stuff to powering your big ideas<br className="hidden sm:block" /> We create AI automations that actually make life easier and work more productive
                 </p>
-                <div className="flex flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-4 sm:px-0">
+                <div className="flex flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:gap-4 sm:px-0 pointer-events-auto">
                   <Button
                     href="/book-demo"
                     variant="primary"
