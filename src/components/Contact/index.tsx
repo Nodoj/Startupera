@@ -41,7 +41,7 @@ const Contact = ({ searchParams }: { searchParams?: { success?: string; error?: 
                         htmlFor="name"
                         className="mb-3 block text-sm font-medium text-dark dark:text-white"
                       >
-                        Your Name
+                        Your Name <span className="text-primary">*</span>
                       </label>
                       <input
                         type="text"
@@ -58,7 +58,7 @@ const Contact = ({ searchParams }: { searchParams?: { success?: string; error?: 
                         htmlFor="email"
                         className="mb-3 block text-sm font-medium text-dark dark:text-white"
                       >
-                        Your Email
+                        Your Email <span className="text-primary">*</span>
                       </label>
                       <input
                         type="email"
@@ -107,7 +107,7 @@ const Contact = ({ searchParams }: { searchParams?: { success?: string; error?: 
                         htmlFor="message"
                         className="mb-3 block text-sm font-medium text-dark dark:text-white"
                       >
-                        Project Details
+                        Project Details <span className="text-primary">*</span>
                       </label>
                       <textarea
                         name="message"
